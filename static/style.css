@@ -1,0 +1,68 @@
+
+
+body {
+    background-color: rgb(67, 115, 229);
+  }
+  
+  h1 {
+    color:white;
+    text-align: center;
+    padding:0.2rem;
+    font-size: 3rem;
+  }
+  
+  h3 {
+    color:white;
+    text-align: center;
+    padding:0.2rem;
+    font-size: 1.5rem;
+  }
+  
+  .coming_soon {
+    font-size: 5rem;
+    text-align: center;
+    color: white;
+    padding:2rem;
+    background-color: rgb(19, 59, 153);
+    display: inline-block;
+  }
+  
+  .container {
+    text-align: center; 
+  }
+  
+  table {
+    margin: 10%,10%; 
+  }
+  
+  .landing {
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .landing th {
+    background-color: white;
+    font-size: 1rem;
+    color:  rgb(19, 59, 153);
+    width:15%;
+  }
+  
+  .landing td {
+    background-color: white;
+    font-size: 1rem;
+    color:  rgb(67, 115, 229);
+    width:15%;
+    height:15%;
+    padding:3%;
+  }
+  
+  .fa-solid {
+    font-size: 6rem;
+    color:  rgb(19, 59, 153);
+  }
+  
+  .fa-regular {
+    font-size: 6rem;
+    color:  rgb(19, 59, 153);
+  }
