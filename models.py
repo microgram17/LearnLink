@@ -2,17 +2,17 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import relationship, backref
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import UserMixin, RoleMixin
+from flask_security import UserMixin, RoleMixin, AsaList
 
 db = SQLAlchemy()
 
 
 ### DB  MODEL DEFINITION
-class Roles(db.Model, RoleMixin):
-    __tablename__ = 'roles'
+class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
     roleid = Column(Integer,primary_key=True)
     rolename = Column(String(64), unique=True)
-    permissons = Column()
+    permissons = Column(String())
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
