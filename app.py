@@ -33,4 +33,5 @@ if __name__ == '__main__':
         upgrade()
         db.create_all()
 
+
     app.run(debug=True)
