@@ -49,23 +49,37 @@ nav ul li ul li a:hover {
 }
  
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 600px) {
 	nav {
-		width:auto;
+		width:25%;
 	}
-}
+	.content {
+		margin-left: 25%;
+		margin-top: 35%;
+		padding: 20px;
+	  }
+	}
   
 @media screen and (max-width: 600px) {
+	.content {
+		margin-left: 5%;
+        margin-top: 250px; /* Adjust based on navbar height */
+        padding: 20px;
+	  }
+
 	nav {
 		text-align: center;
 		float: none;
 		width:100%;
 		height:auto;
+		display:block;
+		position: fixed;
+		z-index: 1; /* Stay on top */
 	}
-
 
 	nav li a {
 	  text-align: center;
 	  float: none;
 	}
   }
+

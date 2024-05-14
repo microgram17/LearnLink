@@ -1,27 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% block head %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-      href="{{ url_for('static', filename='script.js') }}"
-    />
+    <link rel="stylesheet" href="/static/style.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     <title>{% block title %}{% endblock %}</title>
 
-    {% endblock %}
   </head>
 
-  <body>
-    <div>{% block content %} 
-      
+  <body> 
       <nav>
-        <code>
         <ul>
             <li><a href='#profile'>Profile</a></li>
             <li><a href='#message'>Messages</a></li>
@@ -43,9 +34,10 @@
             </li>
             <li><a href='#message'>Logout</a></li>
         </ul>
-        </code>
     </nav>
-      {% endblock %}</div>
+    {% block content %}
+    
+    {% endblock %}
       <script>
         $('.sub-menu ul').hide();
         $(".sub-menu a").click(function () {
