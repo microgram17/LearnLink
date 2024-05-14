@@ -5,7 +5,11 @@ https://microgram.pythonanywhere.com/
 
 ## Database setup and migration
 Initialize database
-```flask db init
+```
+flask db init
+```
 
 Run flask app
-```py app.py
+```
+py app.py
+```
