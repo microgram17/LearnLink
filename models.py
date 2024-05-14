@@ -10,14 +10,14 @@ db = SQLAlchemy()
 ### DB  MODEL DEFINITION
 class Role(db.Model, RoleMixin):
     __tablename__ = 'role'
-    roleid = Column(Integer,primary_key=True)
-    rolename = Column(String(64), unique=True)
+    role_id = Column(Integer,primary_key=True)
+    role_name = Column(String(64), unique=True)
     permissons = Column(String())
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
-    userid = Column(Integer, primary_key=True)
-    username = Column(String(255), unique=True, nullable=True)
+    user_id = Column(Integer, primary_key=True)
+    user_name = Column(String(255), unique=True, nullable=True)
     email = Column(String(255), unique=True)
     password = Column(String(255), nullable=False)
     last_login_at = Column(DateTime())
@@ -26,22 +26,22 @@ class User(db.Model, UserMixin):
 
 class Category(db.Model):
     __tablename__ = 'categories'
-    catid = Column(Integer, primary_key=True)
-    catname = Column(String(255))
+    category_id = Column(Integer, primary_key=True)
+    category_name = Column(String(255))
     subcategories = relationship('SubCategory', backref='category', lazy=True)
 
 class SubCategory(db.Model):
     __tablename__ = 'subcategories'
-    subcatid = Column(Integer, primary_key=True)
-    catid = Column(Integer, ForeignKey('categories.catid'))
+    sub_category_id = Column(Integer, primary_key=True)
+    category_id = Column(Integer, ForeignKey('categories.category_id'))
 
 class Post(db.Model):
     __tablename__ = 'posts'
-    postid = Column(Integer, primary_key=True)
-    posttitle = Column(String(255))
-    postbody = Column(String(255))
-    userid = Column(Integer, ForeignKey('users.userid'))
-    subcatid = Column(Integer, ForeignKey('subcategories.subcatid'))
+    post_id = Column(Integer, primary_key=True)
+    post_title = Column(String(255))
+    post_body = Column(String(255))
+    user_id = Column(Integer, ForeignKey('users.user_id'))
+    sub_cat_id = Column(Integer, ForeignKey('subcategories.sub_category_id'))
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
     visibility = Column(String)
@@ -49,32 +49,32 @@ class Post(db.Model):
     user = relationship('User', backref='posts')
 class Comments(db.Model):
     __tablename__ = 'comments'
-    commentid = Column(Integer, primary_key=True)
-    postid = Column(Integer, ForeignKey('posts.postid'))
-    userid = Column(Integer, ForeignKey('users.userid'))
-    cmttext = Column(String(255))
+    comment_id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, ForeignKey('posts.post_id'))
+    user_id = Column(Integer, ForeignKey('users.user_id'))
+    comment_text = Column(String(255))
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
 
 class Tags(db.Model):
     __tablename__ = 'tags'
-    tagid = Column(Integer, primary_key=True)
-    tagname = Column(String(255))
+    tag_id = Column(Integer, primary_key=True)
+    tag_name = Column(String(255))
 
 class FileAttachment(db.Model):
     __tablename__ = 'fileattachments'
-    fileid = Column(Integer, primary_key=True)
-    postid = Column(Integer, ForeignKey('posts.postid'))
-    filename = Column(String(255))
+    file_id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, ForeignKey('posts.post_id'))
+    file_name = Column(String(255))
     file_url = Column(String(255))
 
     post = relationship('Post', backref='attachments')
 
 class PostRating(db.Model):
     __tablename__ = 'postratings'
-    prid = Column(Integer, primary_key=True)
-    postid = Column(Integer, ForeignKey('posts.postid'))
-    userID = Column(Integer, ForeignKey('users.userid'))
+    post_rating_id = Column(Integer, primary_key=True)
+    post_id = Column(Integer, ForeignKey('posts.post_id'))
+    user_id = Column(Integer, ForeignKey('users.user_id'))
     like = Column(Boolean)
     dislike = Column(Boolean)
 
@@ -83,8 +83,8 @@ class PostRating(db.Model):
 
 class CommentRating(db.Model):
     __tablename__ = 'commentratings'
-    crid = Column(Integer, primary_key=True)
-    commentid = Column(Integer, ForeignKey('comments.commentid'))
+    comment_rating_id = Column(Integer, primary_key=True)
+    comment_id = Column(Integer, ForeignKey('comments.comment_id'))
     like = Column(Boolean)
     dislike = Column(Boolean)
 
