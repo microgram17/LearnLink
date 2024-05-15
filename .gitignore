@@ -1,3 +1,4 @@
-app.py
 /venv
-.DS_Store
+/__pycache__
+/instance
+/migrations
