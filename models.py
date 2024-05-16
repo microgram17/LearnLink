@@ -13,7 +13,7 @@ class Role(db.Model, RoleMixin):
     role_id = Column(Integer,primary_key=True)
     role_name = Column(String(64), unique=True)
     permissions = Column(String())
-    users = relationship('User', backref='roles')
+    users = relationship('User', backref='roles') # 1 to Many relationship Role to User
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -30,12 +30,13 @@ class Category(db.Model):
     __tablename__ = 'categories'
     category_id = Column(Integer, primary_key=True)
     category_name = Column(String(255))
-    subcategories = relationship('SubCategory', backref='category', lazy=True)
+    subcategories = relationship('SubCategory', backref='category', lazy=True) # 1 to Many relationship Category to SubCategory
 
 class SubCategory(db.Model):
     __tablename__ = 'subcategories'
     sub_category_id = Column(Integer, primary_key=True)
     category_id = Column(Integer, ForeignKey('categories.category_id'))
+    posts = relationship('Post', backref='sub_category', lazy=True) # 1 to Many relationship SubCategory to Post
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -48,7 +49,7 @@ class Post(db.Model):
     updated_at = Column(DateTime())
     visibility = Column(String)
 
-    user = relationship('User', backref='posts')
+
 class Comments(db.Model):
     __tablename__ = 'comments'
     comment_id = Column(Integer, primary_key=True)
