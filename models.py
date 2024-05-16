@@ -12,7 +12,8 @@ class Role(db.Model, RoleMixin):
     __tablename__ = 'role'
     role_id = Column(Integer,primary_key=True)
     role_name = Column(String(64), unique=True)
-    permissons = Column(String())
+    permissions = Column(String())
+    users = relationship('User', backref='roles')
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -23,7 +24,7 @@ class User(db.Model, UserMixin):
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
     role_id = Column(Integer, ForeignKey('role.role_id'))
-    roles = relationship('Role', backref='user')
+
 
 class Category(db.Model):
     __tablename__ = 'categories'
