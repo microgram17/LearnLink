@@ -90,9 +90,12 @@ nav ul li ul li a:hover {
 }
 
 .category-container .box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border: 1px solid black;
 	margin: 25px;
-	width: 19%;
+	width: 20%;
 	height: 10em;
-	text-align: center;
+	font-size: 1.5rem;
 }
