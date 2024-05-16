@@ -14,7 +14,7 @@ class Role(db.Model, RoleMixin):
     role_name = Column(String(64), unique=True)
     permissions = Column(String())
 
-    # 1 to Many relationship Role to User
+    # 1 to Many relationship: 1 Role have Many User
     users = relationship('User', backref='roles')
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -26,26 +26,29 @@ class User(db.Model, UserMixin):
     current_login_at = Column(DateTime())
     role_id = Column(Integer, ForeignKey('role.role_id'))
 
-    # 1 to Many relationship User to Post
+    # 1 to Many relationship: 1 User can make Many Posts
     posts  =relationship('Post', backref='user', lazy='dynamic')
-    # 1 to Many relationship User to Comment
+    # 1 to Many relationship: 1 User can make Many Comment
     comments = relationship('Comments', backref='user', lazy='dynamic')
-    # 1 to Many relationship User to post_rating
+    # 1 to Many relationship: 1 User can rate Many posts
     post_ratings = relationship('PostRating', backref='user', lazy='dynamic')
-    # 1 to Many relatioship User to comment_rating
+    # 1 to Many relatioship: 1 User can rate Many comments
     comment_ratings = relationship('CommentRating', backref='user', lazy='dynamic')
 
 class Category(db.Model):
     __tablename__ = 'categories'
     category_id = Column(Integer, primary_key=True)
     category_name = Column(String(255))
-    subcategories = relationship('SubCategory', backref='category', lazy=True) # 1 to Many relationship Category to SubCategory
 
+    # 1 to Many relationship: 1 Category Have Many SubCategory
+    subcategories = relationship('SubCategory', backref='category', lazy=True)
 class SubCategory(db.Model):
     __tablename__ = 'subcategories'
     sub_category_id = Column(Integer, primary_key=True)
     category_id = Column(Integer, ForeignKey('categories.category_id'))
-    posts = relationship('Post', backref='sub_category', lazy=True) # 1 to Many relationship SubCategory to Post
+
+    # 1 to Many relationship: 1 SubCategory Have Many Posts
+    posts = relationship('Post', backref='sub_category', lazy=True) 
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -58,9 +61,9 @@ class Post(db.Model):
     updated_at = Column(DateTime())
     visibility = Column(String)
 
-    # 1 to Many relationship Post to Comments
+    # 1 to Many relationship: 1 Post has Many Comments
     comments = relationship('Comments', backref='post', lazy='dynamic')
-    # 1 to 1 ralationship Post to post_ratings
+    # 1 to 1 ralationship: 1 Post Have 1 Rating
     rating = relationship('PostRating', back_populates='post', uselist=False)
 
 
