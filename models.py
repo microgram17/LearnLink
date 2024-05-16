@@ -15,7 +15,8 @@ class Role(db.Model, RoleMixin):
     permissions = Column(String())
 
     # 1 to Many relationship: 1 Role have Many User
-    users = relationship('User', backref='roles')
+    users = relationship('User', back_populates='roles')
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id = Column(Integer, primary_key=True)
@@ -26,14 +27,16 @@ class User(db.Model, UserMixin):
     current_login_at = Column(DateTime())
     role_id = Column(Integer, ForeignKey('role.role_id'))
 
+    # 1 to Many relationship: 1 Role have Many User
+    roles = relationship('Role', back_populates='users')
     # 1 to Many relationship: 1 User can make Many Posts
-    posts  = relationship('Post', backref='user', lazy='dynamic')
+    created_posts  = relationship('Post', back_populates='user')
     # 1 to Many relationship: 1 User can make Many Comment
-    comments = relationship('Comments', backref='user', lazy='dynamic')
+    created_comments = relationship('Comments', back_populates='user')
     # 1 to Many relationship: 1 User can rate Many posts
-    post_ratings = relationship('PostRating', backref='user', lazy='dynamic')
+    post_ratings = relationship('PostRating', back_populates='user')
     # 1 to Many relatioship: 1 User can rate Many comments
-    comment_ratings = relationship('CommentRating', backref='user', lazy='dynamic')
+    comment_ratings = relationship('CommentRating', back_populates='user')
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -41,14 +44,17 @@ class Category(db.Model):
     category_name = Column(String(255))
 
     # 1 to Many relationship: 1 Category Have Many SubCategory
-    subcategories = relationship('SubCategory', backref='category', lazy=True)
+    subcategories = relationship('SubCategory', back_populates='category')
+
 class SubCategory(db.Model):
     __tablename__ = 'subcategories'
     sub_category_id = Column(Integer, primary_key=True)
     category_id = Column(Integer, ForeignKey('categories.category_id'))
 
+    # 1 to Many relationship: 1 Category Have Many SubCategory
+    category = relationship('Category', back_populates='subcategories')
     # 1 to Many relationship: 1 SubCategory Have Many Posts
-    posts = relationship('Post', backref='sub_category', lazy=True) 
+    related_posts = relationship('Post', back_populates='sub_category') 
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -61,12 +67,16 @@ class Post(db.Model):
     updated_at = Column(DateTime())
     visibility = Column(String)
 
+    # 1 to Many relationship: 1 User can make Many Posts
+    user = relationship('User', back_populates='created_posts')
+    # 1 to Many relationship: 1 SubCategory Have Many Posts
+    sub_category = relationship('SubCategory', back_populates='related_posts') 
     # 1 to Many relationship: 1 Post has Many Comments
-    comments = relationship('Comments', backref='post', lazy='dynamic')
-    # 1 to 1 ralationship: 1 Post Have 1 Rating
-    post_rating = relationship('PostRating', back_populates='post', uselist=False)
+    related_comments = relationship('Comments', back_populates='related_post')
+    # 1 to 1 relationship: 1 Post Have 1 Rating
+    post_rating = relationship('PostRating', back_populates='rated_post', uselist=False)
     # 1 to Many relationship: 1 Post can have many Files attached to it
-    files_attachments = relationship('FileAttachment', backref='post')
+    files_attached = relationship('FileAttachment', back_populates='attached_post')
 
 
 class Comments(db.Model):
@@ -80,12 +90,12 @@ class Comments(db.Model):
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
 
-    # 1 to Many relationship: 1 Post can have Many Comments
-    post = relationship('Post', backref='comments')
-    # 1 to Many relationship: 1 User can have Many Comments
-    user = relationship('User', backref='comments')
+    # 1 to Many relationship: 1 User can make Many Comment
+    user = relationship('User', back_populates='created_comments')
+    # 1 to Many relationship: 1 Post has Many Comments
+    related_post = relationship('Post', back_populates='related_comments')
     # 1 to 1 relationship: 1 Comment have 1 Rating
-    comment_rating = relationship('CommentRating', back_populates='comments', uselist=False)
+    comment_rating = relationship('CommentRating', back_populates='rated_comments', uselist=False)
     # Self-referential relationship for nested comments
     parent_comment = relationship('Comments', remote_side=[comment_id], backref='child_comments')
 
@@ -101,6 +111,9 @@ class FileAttachment(db.Model):
     file_name = Column(String(255))
     file_url = Column(String(255))
 
+    # 1 to Many relationship: 1 Post can have many Files attached to it
+    attached_post = relationship('Post', back_populates='files_attached')
+
 
 class PostRating(db.Model):
     __tablename__ = 'postratings'
@@ -110,9 +123,9 @@ class PostRating(db.Model):
     like = Column(Boolean)
     dislike = Column(Boolean)
 
-    # 1 to 1 relationship: 1 Rating belongs to 1 Post
-    post = relationship('Post', back_populates='rating')
-    # 1 to 1 Relationship: 1 Rating belongs to 1 User
+    # 1 to 1 relationship: 1 Post have 1 Rating
+    rated_post = relationship('Post', back_populates='post_rating', uselist=False)
+    # 1 to Many relationship: 1 User can rate Many posts
     user = relationship('User', back_populates='post_ratings')
 
     # Ensure each user can rate each post only once
@@ -126,10 +139,10 @@ class CommentRating(db.Model):
     dislike = Column(Boolean)
     user_id = Column(Integer, ForeignKey('users.user_id'))
 
-    # 1 to 1 relationship: 1 Rating belongs to 1 Comment
-    comment = relationship('Comments', back_populates='ratings')
-    # 1 to 1 relationship: 1 Rating belongs to 1 user
+    # 1 to 1 relationship: 1 Comment have 1 Rating
+    rated_comments = relationship('Comments', back_populates='comment_rating', uselist=False)
+    # 1 to Many relatioship: 1 User can rate Many comments
     user = relationship('User', back_populates='comment_ratings')
-
+    
     # Ensure each user can rate each post only once
     __table_args__ = (UniqueConstraint('comment_id', 'user_id'),)
