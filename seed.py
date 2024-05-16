@@ -27,3 +27,5 @@ def seed_data():
         #If entries exists, skip seeding
         print("Database already contains entries. Skipping seeding.")
 
+if __name__ == "__main__":
+    seed_data()
