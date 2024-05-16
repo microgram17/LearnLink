@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     role_id = Column(Integer, ForeignKey('role.role_id'))
 
     # 1 to Many relationship: 1 User can make Many Posts
-    posts  =relationship('Post', backref='user', lazy='dynamic')
+    posts  = relationship('Post', backref='user', lazy='dynamic')
     # 1 to Many relationship: 1 User can make Many Comment
     comments = relationship('Comments', backref='user', lazy='dynamic')
     # 1 to Many relationship: 1 User can rate Many posts
@@ -64,7 +64,9 @@ class Post(db.Model):
     # 1 to Many relationship: 1 Post has Many Comments
     comments = relationship('Comments', backref='post', lazy='dynamic')
     # 1 to 1 ralationship: 1 Post Have 1 Rating
-    rating = relationship('PostRating', back_populates='post', uselist=False)
+    post_rating = relationship('PostRating', back_populates='post', uselist=False)
+    # 1 to Many relationship: 1 Post can have many Files attached to it
+    files_attachments = relationship('FileAttachment', backref='post')
 
 
 class Comments(db.Model):
@@ -72,9 +74,20 @@ class Comments(db.Model):
     comment_id = Column(Integer, primary_key=True)
     post_id = Column(Integer, ForeignKey('posts.post_id'))
     user_id = Column(Integer, ForeignKey('users.user_id'))
+    # Column for self-referential relationship (comments can be made to comments)
+    parent_comment_id = Column(Integer, ForeignKey('comments.comment_id'))
     comment_text = Column(String(255))
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
+
+    # 1 to Many relationship: 1 Post can have Many Comments
+    post = relationship('Post', backref='comments')
+    # 1 to Many relationship: 1 User can have Many Comments
+    user = relationship('User', backref='comments')
+    # 1 to 1 relationship: 1 Comment have 1 Rating
+    comment_rating = relationship('CommentRating', back_populates='comments', uselist=False)
+    # Self-referential relationship for nested comments
+    parent_comment = relationship('Comments', remote_side=[comment_id], backref='child_comments')
 
 class Tags(db.Model):
     __tablename__ = 'tags'
@@ -88,7 +101,6 @@ class FileAttachment(db.Model):
     file_name = Column(String(255))
     file_url = Column(String(255))
 
-    post = relationship('Post', backref='attachments')
 
 class PostRating(db.Model):
     __tablename__ = 'postratings'
@@ -114,5 +126,10 @@ class CommentRating(db.Model):
     dislike = Column(Boolean)
     user_id = Column(Integer, ForeignKey('users.user_id'))
 
-    comment = relationship('Comments', backref='ratings')
-    user = relationship('User', backref='comment_ratings')
+    # 1 to 1 relationship: 1 Rating belongs to 1 Comment
+    comment = relationship('Comments', back_populates='ratings')
+    # 1 to 1 relationship: 1 Rating belongs to 1 user
+    user = relationship('User', back_populates='comment_ratings')
+
+    # Ensure each user can rate each post only once
+    __table_args__ = (UniqueConstraint('comment_id', 'user_id'),)
