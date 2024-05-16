@@ -55,7 +55,6 @@ nav ul li ul li a:hover {
 	}
 	.content {
 		margin-left: 25%;
-		margin-top: 35%;
 		padding: 20px;
 	  }
 	}
@@ -63,7 +62,7 @@ nav ul li ul li a:hover {
 @media screen and (max-width: 600px) {
 	.content {
 		margin-left: 5%;
-        margin-top: 250px; /* Adjust based on navbar height */
+        margin-top: 200px; /* Adjust based on navbar height */
         padding: 20px;
 	  }
 
