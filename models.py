@@ -22,7 +22,8 @@ class User(db.Model, UserMixin):
     password = Column(String(255), nullable=False)
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
-    roles = relationship('Role', backref='user', lazy='dynamic')
+    role_id = Column(Integer, ForeignKey('role.role_id'))
+    roles = relationship('Role', backref='user')
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -87,6 +88,7 @@ class CommentRating(db.Model):
     comment_id = Column(Integer, ForeignKey('comments.comment_id'))
     like = Column(Boolean)
     dislike = Column(Boolean)
+    user_id = Column(Integer, ForeignKey('users.user_id'))
 
-    comment = relationship('Comment', backref='ratings')
+    comment = relationship('Comments', backref='ratings')
     user = relationship('User', backref='comment_ratings')
