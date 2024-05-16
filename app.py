@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from models import db
 from flask_migrate import Migrate, upgrade
 import os
+from seed import seed_data
 
 app = Flask(__name__)
 
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     with app.app_context():
         upgrade()
         db.create_all()
+        seed_data()
 
 
     app.run(debug=True, port=4500)
