@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import relationship, backref
 from flask_sqlalchemy import SQLAlchemy
@@ -13,8 +13,9 @@ class Role(db.Model, RoleMixin):
     role_id = Column(Integer,primary_key=True)
     role_name = Column(String(64), unique=True)
     permissions = Column(String())
-    users = relationship('User', backref='roles') # 1 to Many relationship Role to User
 
+    # 1 to Many relationship Role to User
+    users = relationship('User', backref='roles')
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     user_id = Column(Integer, primary_key=True)
@@ -25,6 +26,14 @@ class User(db.Model, UserMixin):
     current_login_at = Column(DateTime())
     role_id = Column(Integer, ForeignKey('role.role_id'))
 
+    # 1 to Many relationship User to Post
+    posts  =relationship('Post', backref='user', lazy='dynamic')
+    # 1 to Many relationship User to Comment
+    comments = relationship('Comments', backref='user', lazy='dynamic')
+    # 1 to Many relationship User to post_rating
+    post_ratings = relationship('PostRating', backref='user', lazy='dynamic')
+    # 1 to Many relatioship User to comment_rating
+    comment_ratings = relationship('CommentRating', backref='user', lazy='dynamic')
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -48,6 +57,11 @@ class Post(db.Model):
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
     visibility = Column(String)
+
+    # 1 to Many relationship Post to Comments
+    comments = relationship('Comments', backref='post', lazy='dynamic')
+    # 1 to 1 ralationship Post to post_ratings
+    rating = relationship('PostRating', back_populates='post', uselist=False)
 
 
 class Comments(db.Model):
@@ -81,8 +95,13 @@ class PostRating(db.Model):
     like = Column(Boolean)
     dislike = Column(Boolean)
 
-    post = relationship('Post', backref='ratings')
-    user = relationship('User', backref='post_ratings')
+    # 1 to 1 relationship: 1 Rating belongs to 1 Post
+    post = relationship('Post', back_populates='rating')
+    # 1 to 1 Relationship: 1 Rating belongs to 1 User
+    user = relationship('User', back_populates='post_ratings')
+
+    # Ensure each user can rate each post only once
+    __table_args__ = (UniqueConstraint('post_id', 'user_id'),)
 
 class CommentRating(db.Model):
     __tablename__ = 'commentratings'
