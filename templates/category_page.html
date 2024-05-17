@@ -6,43 +6,11 @@
 <section class="content">
     <h2>Available subjects</h2>
     <section class="category-container">
+        {% for category in category%}
         <div class="box">
-            <p>Programming</p>
+            <p>{{ category.category_name }}</p>
         </div>
-        
-        <div class="box">
-            <p>Maths</p>
-        </div>
-        
-        <div class="box">
-            <p>Data Science</p>
-        </div>
-        
-        <div class="box">
-            <p>Medicine</p>
-        </div>
-
-        <div class="box">
-            <p>Philosophy</p>
-        </div>
-
-        <div class="box">
-            <p>Languagues</p>
-        </div>
-
-        <div class="box">
-            <p>Chemistry</p>
-        </div>
-
-        <div class="box">
-            <p>History</p>
-        </div>
-
-        <div class="box">
-            <p>Economics</p>
-        </div>
-
+        {% endfor %}
     </section>
 </section>
-
 {% endblock %}
