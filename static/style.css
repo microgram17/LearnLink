@@ -9,7 +9,7 @@ nav {
 	top: 0; /* Stay at the top */
     left: 0;
 	padding-top: 5%;
-    background-color: #1d4f40;
+    background-color: #003459;
 	height: 100%; /* Full-height: remove this if you want "auto" height */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
@@ -35,7 +35,7 @@ nav ul li a {
 	transition: 0.2s linear;
 }
 nav ul li a:hover {
-	background-color: #2a705b;
+	background-color: #007EA7;
 	color: #fff;
 }
 
@@ -51,11 +51,10 @@ nav ul li ul li a:hover {
 
 @media screen and (min-width: 600px) {
 	nav {
-		width:25%;
+		width:11%;
 	}
 	.content {
-		margin-left: 25%;
-		margin-top: 35%;
+		margin-left: 15%;
 		padding: 20px;
 	  }
 	}
@@ -63,7 +62,7 @@ nav ul li ul li a:hover {
 @media screen and (max-width: 600px) {
 	.content {
 		margin-left: 5%;
-        margin-top: 250px; /* Adjust based on navbar height */
+        margin-top: 200px; /* Adjust based on navbar height */
         padding: 20px;
 	  }
 
@@ -83,3 +82,22 @@ nav ul li ul li a:hover {
 	}
   }
 
+.category-container {
+	display: flex;
+	flex-flow: row wrap;
+	align-content: space-around;
+
+}
+
+.category-container .box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 25px;
+	width: 20%;
+	height: 10em;
+	font-size: 1.5rem;
+	background-color: #007EA7;
+	color: #FFFFFF;
+	text-decoration: none;
+}
