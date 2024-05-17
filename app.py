@@ -17,13 +17,14 @@ def category_page():
     category = Category.query.all()
     return render_template("category_page.html", category=category)
 
+@app.route("/category/<int:category_id>")
+def category_page_by_id(category_id):
+    category = Category.query.get(category_id)
+    return render_template("subcategory_page.html", category=category)
+
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
     return render_template("register_user.html")
-
-@app.route("/category/<int:category_id>")
-def category_page_by_id(category_id):
-    return render_template("category_page.html", category = category)
 
 @app.route("/material/<int:material_id>")
 def material_page(material_id):
