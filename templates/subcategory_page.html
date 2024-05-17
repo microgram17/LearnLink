@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Subjects{% endblock %}
+{% block title %}{{ category.category_name }}{% endblock %}
 
 {% block content %}
 <section class="content">
     <h2>Subcategories for {{ category.category_name }}</h2>
-    <section class="subcategory-container">
+    <section class="category-container">
         {% for subcategory in category.subcategories %}
         <div class="box">
             <p>{{ subcategory.sub_category_name }}</p>
