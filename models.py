@@ -49,6 +49,7 @@ class Category(db.Model):
 class SubCategory(db.Model):
     __tablename__ = 'subcategories'
     sub_category_id = Column(Integer, primary_key=True)
+    sub_category_name = Column(String(255))
     category_id = Column(Integer, ForeignKey('categories.category_id'))
 
     # 1 to Many relationship: 1 Category Have Many SubCategory
