@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% block head %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-      href="{{ url_for('static', filename='script.js') }}"
-    />
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     <title>{% block title %}{% endblock %}</title>
 
-    {% endblock %}
   </head>
 
-  <body>
-    <div>{% block content %} {% endblock %}</div>
+  <body> 
+      <nav>
+        <ul>
+            <li><a href='/'>Subjects</a></li>
+            <li class='sub-menu'><a href='#message'>Help</a>
+                <ul>
+                    <li><a href='#settings'>FAQ's</a></li>
+                    <li><a href="">Contact</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    {% block content %}
+    
+    {% endblock %}
+      <script>
+        $('.sub-menu ul').hide();
+        $(".sub-menu a").click(function () {
+          $(this).parent(".sub-menu").children("ul").slideToggle("100");
+          $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+      });
+      </script>
   </body>
 </html>
