@@ -14,7 +14,8 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def category_page():
-    return render_template("category_page.html")
+    category = Category.query.all()
+    return render_template("category_page.html", category=category)
 
 @app.route("/register", methods=["GET", "POST"])
 def register_user():
