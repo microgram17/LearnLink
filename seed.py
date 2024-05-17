@@ -15,7 +15,7 @@ def seed_data():
             {'category_name':'Math'},
             {'category_name':'Language'},
             {'category_name':'Chemistry'},
-            {'category_name':'Pysics'},
+            {'category_name':'Physics'},
         ]
 
         for category_data in categories_data:
