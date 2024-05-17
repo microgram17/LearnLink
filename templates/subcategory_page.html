@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Subjects{% endblock %}
+
+{% block content %}
+<section class="content">
+    <h2>Available subjects</h2>
+    <section class="category-container">
+        {% for category in category%}
+        <div class="box">
+            <p>{{ category.category_name }}</p>
+        </div>
+        {% endfor %}
+    </section>
+</section>
+{% endblock %}
