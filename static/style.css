@@ -9,7 +9,7 @@ nav {
 	top: 0; /* Stay at the top */
     left: 0;
 	padding-top: 5%;
-    background-color: #1d4f40;
+    background-color: #003459;
 	height: 100%; /* Full-height: remove this if you want "auto" height */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
@@ -35,7 +35,7 @@ nav ul li a {
 	transition: 0.2s linear;
 }
 nav ul li a:hover {
-	background-color: #2a705b;
+	background-color: #007EA7;
 	color: #fff;
 }
 
@@ -93,9 +93,10 @@ nav ul li ul li a:hover {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid black;
 	margin: 25px;
 	width: 20%;
 	height: 10em;
 	font-size: 1.5rem;
+	background-color: #007EA7;
+	color: #FFFFFF;
 }
