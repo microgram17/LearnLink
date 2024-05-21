@@ -102,28 +102,28 @@ nav ul li ul li a:hover {
 	text-decoration: none;
 }
 
+/* Post form  */
 .post-form {
 	margin-left: 15%;
-}
-
-.post-form form {
-	margin-top: 1rem;
-	width: 100%;
-}
-.post-form input {
-	height: 2rem;
-}
-
-.post-form p{
 	font-size: 2rem;
 }
 
-.post-form textarea {
+.input-field {
+	padding: 1em;
 	width: 80%;
+	font-size: 1rem;
+	margin-bottom: 1em;
+}
+
+.textarea-field {
+	width: 80%;
+	padding: 1em;
+	font-size: 1rem;
+	margin-bottom: 1em;
 	resize: none;
 }
 
 .submit-button input{
-	height: 3rem;
-	width: auto;
+	padding: 1em;
+	font-size: 1rem;
 }
