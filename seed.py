@@ -8,6 +8,7 @@ def seed_data():
         {'category_name': 'Language'},
         {'category_name': 'Chemistry'},
         {'category_name': 'Physics'},
+        {'category_name': 'Biology'},
     ]
 
     # Dictionary to store created categories by name
@@ -27,10 +28,21 @@ def seed_data():
 
     # SubCategory seed data
     subcategories_data = [
-        {'sub_category_name': 'Python', 'category_name': 'Programming'},
-        {'sub_category_name': 'JavaScript', 'category_name': 'Programming'}
-    ]
-
+            {'sub_category_name': 'Python', 'category_name': 'Programming'},
+            {'sub_category_name': 'JavaScript', 'category_name': 'Programming'},
+            {'sub_category_name': 'Matlab', 'category_name': 'Programming'},
+            {'sub_category_name': 'Analytical Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Computational Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Medicinal Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Inorganic Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Physical Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Organic Chemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Biochemistry', 'category_name': 'Chemistry'},
+            {'sub_category_name': 'Microbiology', 'category_name': 'Biology'},
+            {'sub_category_name': 'Molecularbiology', 'category_name': 'Biology'},
+            {'sub_category_name': 'Ecology', 'category_name': 'Biology'}
+            ]
+    
     # Check for existing subcategories and add new ones
     for subcategory_data in subcategories_data:
         sub_category_name = subcategory_data['sub_category_name']
