@@ -102,7 +102,11 @@ def make_links(text):
     # Regular expression to find urls
     url_regex = re.compile(r'(https?://[^\s]+)')
     # Function to replace URLs with anchor tags
-    return Markup(re.sub(url_regex, r'<a href="\1" target="_blank">\1<a\>', text))
+    def replace(match):
+        url = match.group(0) # Extract Full URLs
+        return f'<a href="{url}" target="_blank">{url}</a><br>' # return url as a clickable link
+    # Function to replace URLs with anchor tags
+    return Markup(re.sub(url_regex, replace, text))
 
 app.jinja_env.filters['make_links'] = make_links
 
