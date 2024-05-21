@@ -27,7 +27,8 @@ def register_user():
     return render_template("register_user.html")
 
 @app.route("/material/<int:material_id>")
-def material_page(material_id):
+def material_page(post_id):
+    material = Post.query.get(post_id)
     return render_template("material_page.html", material = material)
 
 
