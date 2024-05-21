@@ -26,7 +26,12 @@ def category_page_by_id(category_id):
 def register_user():
     return render_template("register_user.html")
 
-@app.route("/material/<int:material_id>")
+@app.route("/materials/<int:sub_cat_id>")
+def materials_page(sub_cat_id):
+    materials = Post.query.get(sub_cat_id)
+    return render_template("materials_page.html", materials = materials)
+
+@app.route("/materials/<int:post_id>")
 def material_page(post_id):
     material = Post.query.get(post_id)
     return render_template("material_page.html", material = material)
