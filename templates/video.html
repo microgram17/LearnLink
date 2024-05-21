@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.post_title }}</title>
+</head>
+<body>
+    <h1>{{ post.post_title }}</h1>
+    <p>{{ post.post_body | safe }}</p>
+
+    {% for attachment in post.files_attached %}
+        {% if attachment.file_type == 'image' %}
+            <div>
+                <img src="{{ attachment.file_url }}" alt="Post Image" style="max-width: 100%; height: auto;">
+            </div>
+        {% elif attachment.file_type == 'video' %}
+            <div>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ attachment.file_url.split('/')[-1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
