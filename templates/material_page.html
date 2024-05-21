@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Materials{% endblock %}
+
+{% block content %}
+<section class="content">
+    <h2>Available subjects</h2>
+    <section class="category-container">
+        {% for category in category%}
+        <a class="box" href="{{ url_for('material_page', post_id=material.post_id) }}"><div class="box">
+            <p>{{ material.post_title }}</p>
+        </div></a>
+        {% endfor %}
+    </section>
+</section>
+{% endblock %}
