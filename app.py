@@ -38,17 +38,20 @@ def register_user():
 def material_page(material_id):
     return render_template("material_page.html", material = material)
 
+# Place holder för att titta på posts manuellet
 @app.route('/post/<int:post_id>')
 def view_post(post_id):
     # Assuming you have a function to fetch a post by its ID
     post = Post.query.get(post_id)
     return render_template('video.html', post=post)
 
+# Model for Post creation form
 class PostForm(FlaskForm):
     post_title = StringField('Title', validators=[DataRequired(), Length(max=255)])
     post_body = TextAreaField('Body', validators=[DataRequired()])
     submit = SubmitField('Create Post')
 
+# Route for Post creation form
 @app.route('/create_post', methods=['GET', 'POST'])
 def create_post():
     sub_cat_id = request.args.get('sub_cat_id', type=int)
