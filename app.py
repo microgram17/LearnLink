@@ -68,27 +68,6 @@ def create_post():
 
     return render_template('create_post.html', form=form)
 
-### ! V1 code
-
-    # # Populate the subcategory choices
-    # # form.sub_cat_id.choices = [(sub_category.sub_category_id, sub_category.sub_category_name) for sub_category in SubCategory.query.all()]
-
-    # if form.validate_on_submit():
-    #     new_post = Post(
-    #         post_title=form.post_title.data,
-    #         post_body=form.post_body.data,
-    #         sub_cat_id=form.sub_cat_id.data,
-    #         created_at=datetime.now(),
-    #         updated_at=datetime.now(),
-    #         visibility='public'
-    #     )
-    #     db.session.add(new_post)
-    #     db.session.commit()
-    #     flash('Post created successfully!', 'success')
-    #     return redirect(url_for('category_page'))  # Replace 'some_page' with the endpoint you want to redirect to
-
-    # return render_template('create_post.html', form=form)
-
 
 if __name__ == '__main__':
     with app.app_context():
