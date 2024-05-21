@@ -103,9 +103,14 @@ nav ul li ul li a:hover {
 }
 
 footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 	background-color: #007EA7;
 	color: #FFFFFF;
-	padding: 20px 0;
+    text-align: center;
+	padding-top: .6em;
+	padding-bottom: .6em;
 }
 
 .footer-container {
@@ -115,4 +120,24 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+.footer-section p, .footer-section a, .footer-section form {
+    margin: 5px 0;
+}
+
+.footer-section a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
