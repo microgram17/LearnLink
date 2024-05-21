@@ -21,20 +21,6 @@
             <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
         </p>
-        <p>
-            {{ form.image_url.label }}<br>
-            {{ form.image_url(size=80) }}<br>
-            {% for error in form.image_url.errors %}
-            <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.video_url.label }}<br>
-            {{ form.video_url(size=80) }}<br>
-            {% for error in form.video_url.errors %}
-            <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </p>
         <p>{{ form.submit() }}</p>
     </form>
 </body>
