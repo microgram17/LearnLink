@@ -37,9 +37,17 @@ def register_user():
 def material_page(material_id):
     return render_template("material_page.html", material = material)
 
+@app.route('/post/<int:post_id>')
+def view_post(post_id):
+    # Assuming you have a function to fetch a post by its ID
+    post = Post.query.get(post_id)
+    return render_template('video.html', post=post)
+
 class PostForm(FlaskForm):
     post_title = StringField('Title', validators=[DataRequired(), Length(max=255)])
     post_body = TextAreaField('Body', validators=[DataRequired()])
+    image_url = StringField('Image URL', validators=[Length(max=255)])
+    video_url = StringField('Video URL', validators=[Length(max=255)])
     submit = SubmitField('Create Post')
 
 @app.route('/create_post', methods=['GET', 'POST'])
@@ -47,7 +55,7 @@ def create_post():
     sub_cat_id = request.args.get('sub_cat_id', type=int)
     if not sub_cat_id:
         flash('Subcategory ID is required!', 'danger')
-        return redirect(url_for('subcategory_page'))
+        return redirect(url_for('subcategory_page'))  # Ensure 'subcategory_page' is a valid route
 
     form = PostForm()
     
@@ -63,6 +71,28 @@ def create_post():
         )
         db.session.add(new_post)
         db.session.commit()
+
+        # Handle the file attachments
+        if form.image_url.data:
+            new_image = FileAttachment(
+                post_id=new_post.post_id,
+                file_name='Image',
+                file_url=form.image_url.data,
+                file_type='image'
+            )
+            db.session.add(new_image)
+        
+        if form.video_url.data:
+            new_video = FileAttachment(
+                post_id=new_post.post_id,
+                file_name='Video',
+                file_url=form.video_url.data,
+                file_type='video'
+            )
+            db.session.add(new_video)
+
+        db.session.commit()
+        
         flash('Post created successfully!', 'success')
         return redirect(url_for('category_page'))  # Replace 'some_page' with the endpoint you want to redirect to
 
