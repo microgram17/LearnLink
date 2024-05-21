@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired, Length
 from flask_login import login_required, current_user
 from datetime import datetime
 import re
+from markupsafe import Markup
 
 app = Flask(__name__)
 
@@ -96,6 +97,14 @@ def create_post():
 
     return render_template('create_post.html', form=form)
 
+# Jinjia filter to change urls in post body to clickable links
+def make_links(text):
+    # Regular expression to find urls
+    url_regex = re.compile(r'(https?://[^\s]+)')
+    # Function to replace URLs with anchor tags
+    return Markup(re.sub(url_regex, r'<a href="\1" target="_blank">\1<a\>', text))
+
+app.jinja_env.filters['make_links'] = make_links
 
 if __name__ == '__main__':
     with app.app_context():
