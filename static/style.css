@@ -101,3 +101,29 @@ nav ul li ul li a:hover {
 	color: #FFFFFF;
 	text-decoration: none;
 }
+
+.post-form {
+	margin-left: 15%;
+}
+
+.post-form form {
+	margin-top: 1rem;
+	width: 100%;
+}
+.post-form input {
+	height: 2rem;
+}
+
+.post-form p{
+	font-size: 2rem;
+}
+
+.post-form textarea {
+	width: 80%;
+	resize: none;
+}
+
+.submit-button input{
+	height: 3rem;
+	width: auto;
+}
