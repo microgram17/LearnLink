@@ -2,19 +2,19 @@
 
 {% block content %}
 <section class="post-form">
-    <h1>Create Post</h1>
+    <h1>Create Post for {{ form.sub_category.sub_category_nam }}</h1>
     <form method="POST" action="{{ url_for('create_post', sub_cat_id=request.args.get('sub_cat_id')) }}">
         {{ form.hidden_tag() }}
         <p>
             {{ form.post_title.label }}<br>
-            {{ form.post_title(size=80) }}<br>
+            {{ form.post_title(class="input-field") }}<br>
             {% for error in form.post_title.errors %}
             <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
         </p>
         <p>
             {{ form.post_body.label }}<br>
-            {{ form.post_body(rows=10, cols=80) }}<br>
+            {{ form.post_body(rows=10, cols= 80, class="textarea-field") }}<br>
             {% for error in form.post_body.errors %}
             <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
