@@ -7,10 +7,16 @@
     <h2>Subcategories for {{ category.category_name }}</h2>
     <section class="category-container">
         {% for subcategory in category.subcategories %}
-        <div class="box">
+        <div class="box" onclick="redirectToCreatePost('{{ subcategory.sub_category_id }}')">
             <p>{{ subcategory.sub_category_name }}</p>
         </div>
         {% endfor %}
     </section>
 </section>
+
+<script>
+    function redirectToCreatePost(subcategoryId) {
+        window.location.href = "{{ url_for('create_post') }}?sub_cat_id=" + subcategoryId;
+    }
+</script>
 {% endblock %}
