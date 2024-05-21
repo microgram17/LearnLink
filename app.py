@@ -30,7 +30,9 @@ def register_user():
 def material_page(material_id):
     return render_template("material_page.html", material = material)
 
-
+@app.route("/create_post/", methods=["GET","POST"])
+def create_post():
+    return render_template("create_post.html")
 
 if __name__ == '__main__':
     with app.app_context():
