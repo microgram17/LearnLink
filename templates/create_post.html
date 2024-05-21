@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Post</title>
-</head>
-<body>
-    <h1>Create Post</h1>
-    <form method="POST" action="{{ url_for('create_post', sub_cat_id=request.args.get('sub_cat_id')) }}">
+{% extends "base.html" %}
+
+{% block content %}
+<section class="post-form">
+    <h1>Create Post for {{ sub_category.sub_category_name }}</h1>
+    <form method="POST" action="{{ url_for('create_post', sub_cat_id=sub_cat_id) }}">
         {{ form.hidden_tag() }}
         <p>
             {{ form.post_title.label }}<br>
-            {{ form.post_title(size=80) }}<br>
+            {{ form.post_title(class="input-field") }}<br>
             {% for error in form.post_title.errors %}
             <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
         </p>
         <p>
             {{ form.post_body.label }}<br>
-            {{ form.post_body(rows=10, cols=80) }}<br>
+            {{ form.post_body(rows=10, cols= 80, class="textarea-field") }}<br>
             {% for error in form.post_body.errors %}
             <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p class="submit-button">{{ form.submit() }}</p>
     </form>
-</body>
-</html>
+</section>
+{% endblock %}
