@@ -57,8 +57,8 @@ def create_post():
             post_body=form.post_body.data,
             user_id=1,  # Placeholder for the user ID since login is not implemented
             sub_cat_id=sub_cat_id,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(datetime.UTC),
+            updated_at=datetime.now(datetime.UTC),
             visibility='public'
         )
         db.session.add(new_post)
