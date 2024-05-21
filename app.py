@@ -8,6 +8,7 @@ from wtforms import StringField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length
 from flask_login import login_required, current_user
 from datetime import datetime
+import re
 
 app = Flask(__name__)
 
@@ -46,8 +47,6 @@ def view_post(post_id):
 class PostForm(FlaskForm):
     post_title = StringField('Title', validators=[DataRequired(), Length(max=255)])
     post_body = TextAreaField('Body', validators=[DataRequired()])
-    image_url = StringField('Image URL', validators=[Length(max=255)])
-    video_url = StringField('Video URL', validators=[Length(max=255)])
     submit = SubmitField('Create Post')
 
 @app.route('/create_post', methods=['GET', 'POST'])
@@ -65,59 +64,34 @@ def create_post():
             post_body=form.post_body.data,
             user_id=1,  # Placeholder for the user ID since login is not implemented
             sub_cat_id=sub_cat_id,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
             visibility='public'
         )
+        
         db.session.add(new_post)
         db.session.commit()
 
-        # Handle the file attachments
-        if form.image_url.data:
-            new_image = FileAttachment(
-                post_id=new_post.post_id,
-                file_name='Image',
-                file_url=form.image_url.data,
-                file_type='image'
-            )
-            db.session.add(new_image)
+        # Parse the post_body for video URLs and store them as video attachments
+        video_urls = re.findall(r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))', form.post_body.data)
+        for match in video_urls:
+            youtube_id = match[1] if match[1] else match[2]
+            if youtube_id:
+                youtube_embed_url = f"https://www.youtube.com/embed/{youtube_id}"
+                new_video = FileAttachment(
+                    post_id=new_post.post_id,  # Associate the FileAttachment with the new_post
+                    file_name='Video',
+                    file_url=youtube_embed_url,
+                    file_type='video'
+                )
+                db.session.add(new_video)
         
-        if form.video_url.data:
-            new_video = FileAttachment(
-                post_id=new_post.post_id,
-                file_name='Video',
-                file_url=form.video_url.data,
-                file_type='video'
-            )
-            db.session.add(new_video)
+        db.session.commit()  # Commit changes after adding FileAttachment objects
 
-        db.session.commit()
-        
         flash('Post created successfully!', 'success')
-        return redirect(url_for('category_page'))  # Replace 'some_page' with the endpoint you want to redirect to
+        return redirect(url_for('category_page'))  # Replace 'category_page' with the endpoint you want to redirect to
 
     return render_template('create_post.html', form=form)
-
-### ! V1 code
-
-    # # Populate the subcategory choices
-    # # form.sub_cat_id.choices = [(sub_category.sub_category_id, sub_category.sub_category_name) for sub_category in SubCategory.query.all()]
-
-    # if form.validate_on_submit():
-    #     new_post = Post(
-    #         post_title=form.post_title.data,
-    #         post_body=form.post_body.data,
-    #         sub_cat_id=form.sub_cat_id.data,
-    #         created_at=datetime.now(),
-    #         updated_at=datetime.now(),
-    #         visibility='public'
-    #     )
-    #     db.session.add(new_post)
-    #     db.session.commit()
-    #     flash('Post created successfully!', 'success')
-    #     return redirect(url_for('category_page'))  # Replace 'some_page' with the endpoint you want to redirect to
-
-    # return render_template('create_post.html', form=form)
 
 
 if __name__ == '__main__':
