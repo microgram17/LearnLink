@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>{{ post.post_title }}</h1>
-    <p>{{ post.post_body | safe }}</p>
+    <p>{{ post.post_body | make_links | safe }}</p>
 
     {% for attachment in post.files_attached %}
         {% if attachment.file_type == 'image' %}
