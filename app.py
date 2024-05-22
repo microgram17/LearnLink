@@ -41,7 +41,7 @@ def materials_page(sub_cat_id):
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials = materials, sub_category = sub_category)
 
-@app.route("/materials/<int:post_id>")
+@app.route("/material/<int:post_id>")
 def material_page(post_id):
     material = Post.query.get(post_id)
     return render_template("material_page.html", material = material)
