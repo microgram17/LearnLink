@@ -114,9 +114,58 @@ nav ul li ul li a:hover {
 }
 
 .material-sub-box {
-	tex
+	position: relative;
+	width: 100%; /* Ensure the box takes full width */
 }
 
+.material-sub-box h1 {
+	margin-bottom: 15px;
+	padding-bottom: 5px; /* Optional: Adjust to add space between text and border */
+	position: relative;
+	z-index: 1;
+}
+
+.material-sub-box h1::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -5px; /* Adjust to control the distance from the text */
+	width: 100%;
+	height: 2px;
+	background-color: black;
+	z-index: -1;
+}
+
+/* POST BUTTON */
+.post-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007BFF; /* Primary blue color */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+	margin-left: 88%;
+}
+
+.post-button:hover {
+    background-color: #0056b3; /* Darker blue for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.post-button:active {
+    background-color: #003d80; /* Even darker blue for active effect */
+    transform: scale(0.95); /* Slightly shrink the button on click */
+}
+
+.post-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0,123,255,0.5); /* Focus ring for accessibility */
+}
 /* Post form  */
 .post-form {
 	margin-left: 15%;
