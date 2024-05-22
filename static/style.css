@@ -182,3 +182,56 @@ footer {
         align-items: center;
     }
 }
+
+
+/* Container */
+.content-21 {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.content-21:hover {
+    transform: scale(1.02);
+}
+
+/* Title */
+.post-title-21 h1 {
+    margin-bottom: 15px;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    color: #00796b;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid #00796b;
+    padding-bottom: 10px;
+}
+
+/* Body */
+.post-body-21 p {
+    line-height: 1.8;
+    font-family: 'Georgia', serif;
+    color: #333;
+    font-size: 16px;
+    margin-top: 0;
+    text-align: justify;
+}
+
+/* Cool Effects */
+.post-body-21 p::first-letter {
+    font-size: 1.8em;
+    font-weight: bold;
+    float: left;
+    margin-right: 8px;
+    color: #00796b;
+}
+
+.post-body-21 p:hover {
+    color: #004d40;
+    transition: color 0.3s ease;
+}
