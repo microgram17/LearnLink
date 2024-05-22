@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Material{% endblock %}
+
+{% block content %}
+<section class="content">
+    <h1>{{ material.post_title }}</h1>
+    <p>{{ material.post_body | make_links | safe }}</p>
+</section>
+{% endblock %}
