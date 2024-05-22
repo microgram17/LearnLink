@@ -86,7 +86,6 @@ nav ul li ul li a:hover {
 	display: flex;
 	flex-flow: row wrap;
 	align-content: space-around;
-
 }
 
 .category-container .box {
@@ -100,6 +99,22 @@ nav ul li ul li a:hover {
 	background-color: #00A8E8;
 	color: #FFFFFF;
 	text-decoration: none;
+}
+
+.material-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #00A8E8;
+	color: #FFFFFF;
+	margin: 25px;
+	padding: 25px;
+	width: 90%;
+	text-decoration: none;
+}
+
+.material-sub-box {
+	tex
 }
 
 /* Post form  */
