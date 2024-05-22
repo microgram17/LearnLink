@@ -95,9 +95,9 @@ nav ul li ul li a:hover {
 	align-items: center;
 	margin: 25px;
 	width: 20%;
-	height: 10em;
-	font-size: 1.5rem;
-	background-color: #007EA7;
+	height: 7em;
+	font-size: 2rem;
+	background-color: #00A8E8;
 	color: #FFFFFF;
 	text-decoration: none;
 }
@@ -126,4 +126,44 @@ nav ul li ul li a:hover {
 .submit-button input{
 	padding: 1em;
 	font-size: 1rem;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: #007EA7;
+	color: #FFFFFF;
+    text-align: center;
+	padding-top: .6em;
+	padding-bottom: .6em;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section p, .footer-section a, .footer-section form {
+    margin: 5px 0;
+}
+
+.footer-section a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
