@@ -17,15 +17,18 @@ migrate = Migrate(app, db)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
+
 @app.route("/")
 def category_page():
     category = Category.query.all()
     return render_template("category_page.html", category=category)
 
+
 @app.route("/category/<int:category_id>")
 def category_page_by_id(category_id):
     category = Category.query.get(category_id)
     return render_template("subcategory_page.html", category=category)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -39,7 +42,8 @@ def register():
             return redirect(url_for('register'))
 
         hashed_password = hash_password(password)
-        user_datastore.create_user(user_name=username, email=email, password=hashed_password, roles=['User'])
+        user_datastore.create_user(
+            user_name=username, email=email, password=hashed_password, roles=['User'])
         db.session.commit()
 
         flash('User successfully registered')
@@ -50,9 +54,8 @@ def register():
 
 @app.route("/material/<int:material_id>")
 def material_page(material_id):
-    return render_template("material_page.html", material = material)
+    return render_template("material_page.html", material=material)
 
-'''---------------------------------------------------------------'''
 
 def user_seed_data():
 
@@ -62,12 +65,14 @@ def user_seed_data():
         db.session.commit()
 
     if not User.query.first():
-        user_datastore.create_user(email='test@example.com', password=hash_password('password'), roles=['Admin','User'])
-        user_datastore.create_user(email='c@c.com', password=hash_password('password'), roles=['User'])
-        user_datastore.create_user(email='d@d.com', password=hash_password('password'), roles=['Admin'])
+        user_datastore.create_user(
+            email='test@example.com', password=hash_password('password'), roles=['Admin', 'User'])
+        user_datastore.create_user(
+            email='c@c.com', password=hash_password('password'), roles=['User'])
+        user_datastore.create_user(
+            email='d@d.com', password=hash_password('password'), roles=['Admin'])
         db.session.commit()
 
-'''---------------------------------------------------------------'''
 
 if __name__ == '__main__':
     with app.app_context():
