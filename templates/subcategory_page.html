@@ -9,7 +9,7 @@
         {% for subcategory in category.subcategories %}
         <a class="box" href="{{ url_for('materials_page', sub_cat_id=subcategory.sub_category_id) }}"><div class="box">
             <p>{{ subcategory.sub_category_name }}</p>
-        </div>
+        </div></a>
         {% endfor %}
     </section>
 </section>
