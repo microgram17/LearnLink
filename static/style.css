@@ -101,3 +101,10 @@ nav ul li ul li a:hover {
 	color: #FFFFFF;
 	text-decoration: none;
 }
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+  }
