@@ -10,41 +10,44 @@
     <title>{% block title %}{% endblock %}</title>
   </head>
 
-  <body>
-    <nav>
-      {% if current_user.is_authenticated %}
-      <ul>
-        <li><a href="/logout">logout</a></li>
-        <li><a href="/">Subjects</a></li>
-        <li class="sub-menu">
-          <a href="#message">Help</a>
-          <ul>
-            <li><a href="#settings">FAQ's</a></li>
-            <li><a href="">Contact</a></li>
-          </ul>
-        </li>
-      </ul>
-      {% else %}
-      <ul>
-        <li><a href="/login">login</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/">Subjects</a></li>
-        <li class="sub-menu">
-          <a href="#message">Help</a>
-          <ul>
-            <li><a href="#settings">FAQ's</a></li>
-            <li><a href="">Contact</a></li>
-          </ul>
-        </li>
-      </ul>
-      {% endif %}
-    </nav>
-    {% block content %} {% endblock %}
-    <script>
-      $(".sub-menu ul").hide();
-      $(".sub-menu a").click(function () {
-        $(this).parent(".sub-menu").children("ul").slideToggle("100");
-        $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+
+  <body> 
+      <nav>
+        {% if current_user.is_authenticated %}
+        <ul>
+          <li><a href="/logout">logout</a></li>
+          <li><a href="/">Subjects</a></li>
+          <li class="sub-menu">
+            <a href="#message">Help</a>
+            <ul>
+              <li><a href="#settings">FAQ's</a></li>
+              <li><a href="">Contact</a></li>
+            </ul>
+          </li>
+        </ul>
+        {% else %}
+        <ul>
+          <li><a href="/login">login</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/">Subjects</a></li>
+          <li class="sub-menu">
+            <a href="#message">Help</a>
+            <ul>
+              <li><a href="#settings">FAQ's</a></li>
+              <li><a href="">Contact</a></li>
+            </ul>
+          </li>
+        </ul>
+        {% endif %}
+      </nav>
+    {% block content %}
+    
+    {% endblock %}
+      <script>
+        $('.sub-menu ul').hide();
+        $(".sub-menu a").click(function () {
+          $(this).parent(".sub-menu").children("ul").slideToggle("100");
+          $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
       });
     </script>
   </body>
