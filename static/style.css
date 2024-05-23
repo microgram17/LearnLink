@@ -213,10 +213,14 @@ nav ul li ul li a:hover {
 }
 
 /* Footer styling */
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 84.5vh;
+}
+
+/* Footer styles */
 footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
     background-color: var(--hover-blue);
     color: var(--text-color);
     text-align: center;
@@ -244,13 +248,6 @@ footer {
 
 .footer-section a:hover {
     text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        align-items: center;
-    }
 }
 
 
