@@ -5,6 +5,7 @@
     {% endfor %} {% endif %} {% endwith %}
     
     <div class="content">
+      <div class="container">
       <h2 class="title">Register New User</h2>
       <form method="POST" action="{{ url_for('register')}}" class="input-field">
         <input
@@ -32,5 +33,6 @@
         />
         <input type="submit" class="submit" />
       </form>
+      </div>
     </div>
     {% endblock %}
