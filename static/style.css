@@ -1,3 +1,6 @@
+body{
+	background: hsl(218deg 50% 91%);
+}
 /* Define color variables */
 :root {
     --primary-color: #007BFF;
@@ -99,10 +102,6 @@ nav ul li ul li a:hover {
     }
 }
 
-.content {
-    min-height: 84.5vh;
-}
-
 /* Category container styling */
 .category-container {
     display: flex;
@@ -111,6 +110,19 @@ nav ul li ul li a:hover {
 }
 
 .category-container .box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 25px;
+	width: 20%;
+	height: 10em;
+	font-size: 1.5rem;
+	background-color: #007EA7;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -216,6 +228,13 @@ nav ul li ul li a:hover {
     font-size: 1rem;
 }
 
+/* Footer styling */
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 84.5vh;
+}
+
 /* Footer styles */
 footer {
     background-color: var(--hover-blue);
@@ -227,7 +246,7 @@ footer {
 
 .footer-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
