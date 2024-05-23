@@ -21,9 +21,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///learnlink.db"
 app.config['SECRET_KEY'] = '9d8^7F&4s2@Lp#N6'
 app.config['SECURITY_PASSWORD_SALT'] = 'super-secret-salt'
 
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
-
 db.init_app(app)
 migrate = Migrate(app, db)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -35,28 +32,6 @@ security = Security(app, user_datastore)
 def category_page():
     category = Category.query.all()
     return render_template("category_page.html", category=category)
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        if User.query.filter_by(email=email).first():
-            flash('Email address already exists')
-            return redirect(url_for('register'))
-
-        hashed_password = hash_password(password)
-        user_datastore.create_user(
-            user_name=username, email=email, password=hashed_password, roles=['User'])
-        db.session.commit()
-
-        flash('User successfully registered')
-        return redirect(url_for('security.login'))
-
-    return render_template('register_user.html')
-
 
 @app.route("/category/<int:category_id>")
 def category_page_by_id(category_id):
