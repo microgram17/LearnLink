@@ -299,3 +299,10 @@ footer {
     color: #004d40;
     transition: color 0.3s ease;
 }
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
