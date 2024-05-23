@@ -24,6 +24,7 @@ def seed_data():
         else:
             categories[category_name] = existing_category.category_id
 
+    
     # Check for existing subcategories and add new ones
     for subcategory_data in subcategories_data:
         sub_category_name = subcategory_data['sub_category_name']
