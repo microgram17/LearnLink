@@ -135,8 +135,7 @@ def create_post(sub_cat_id):
             for match in video_urls:
                 youtube_id = match[1] if match[1] else match[2]
                 if youtube_id:
-                    youtube_embed_url = f"https://www.youtube.com/embed/{
-                        youtube_id}"
+                    youtube_embed_url = f"https://www.youtube.com/embed/{youtube_id}"
                     new_video = FileAttachment(
                         post_id=new_post.post_id,  # Associate the FileAttachment with the new_post
                         file_name='Video',
