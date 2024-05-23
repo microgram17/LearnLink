@@ -109,9 +109,10 @@ class FileAttachment(db.Model):
     post_id = Column(Integer, ForeignKey('posts.post_id'))
     file_name = Column(String(255))
     file_url = Column(String(255))
+    file_type = Column(String(50))
 
+    # 1 to Many relationship: 1 Post can have many Files attached to it
     attached_post = relationship('Post', back_populates='files_attached')
-
 
 class PostRating(db.Model):
     __tablename__ = 'postratings'
