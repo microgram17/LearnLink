@@ -9,6 +9,7 @@
     --text-color: #FFFFFF;
     --black-color: #000000;
     font-family: "Segoe UI", Helvetica, sans-serif;
+    background-color:hsl(218deg 50% 91%);
 }
 
 /* Reset margins and padding for all elements */
@@ -301,10 +302,26 @@ footer {
 }
 
 .container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
+	height: 84.5vh;
+    
+}
+
+.title{
+    font-size: 78px;
+}
+
+.input-field {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    margin: 1em;
+    padding: 1.6em;
+}
+
+.input-field input {
+    padding: 1.6em;
+    margin: 0.3em;
+    font-size: 1em;
 }
 
 .fs-div input{
