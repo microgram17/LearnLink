@@ -99,6 +99,10 @@ nav ul li ul li a:hover {
     }
 }
 
+.content {
+    min-height: 84.5vh;
+}
+
 /* Category container styling */
 .category-container {
     display: flex;
@@ -212,13 +216,6 @@ nav ul li ul li a:hover {
     font-size: 1rem;
 }
 
-/* Footer styling */
-.content {
-    display: flex;
-    flex-direction: column;
-    min-height: 84.5vh;
-}
-
 /* Footer styles */
 footer {
     background-color: var(--hover-blue);
@@ -230,7 +227,7 @@ footer {
 
 .footer-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
