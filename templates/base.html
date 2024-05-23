@@ -3,55 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css" />
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     <title>{% block title %}{% endblock %}</title>
-
   </head>
 
-  <body> 
-      <nav>
-        <ul>
-            <li><a href='/'>Subjects</a></li>
-            <li class='sub-menu'><a href='#message'>Help</a>
-                <ul>
-                    <li><a href='#settings'>FAQ's</a></li>
-                    <li><a href="">Contact</a></li>
-                </ul>
-            </li>
-        </ul>
+  <body>
+    <nav>
+      {% if current_user.is_authenticated %}
+      <ul>
+        <li><a href="/logout">logout</a></li>
+        <li><a href="/">Subjects</a></li>
+        <li class="sub-menu">
+          <a href="#message">Help</a>
+          <ul>
+            <li><a href="#settings">FAQ's</a></li>
+            <li><a href="">Contact</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% else %}
+      <ul>
+        <li><a href="/login">login</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/">Subjects</a></li>
+        <li class="sub-menu">
+          <a href="#message">Help</a>
+          <ul>
+            <li><a href="#settings">FAQ's</a></li>
+            <li><a href="">Contact</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
     </nav>
-    {% block content %}
-    
-    {% endblock %}
-      <script>
-        $('.sub-menu ul').hide();
-        $(".sub-menu a").click(function () {
-          $(this).parent(".sub-menu").children("ul").slideToggle("100");
-          $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+    {% block content %} {% endblock %}
+    <script>
+      $(".sub-menu ul").hide();
+      $(".sub-menu a").click(function () {
+        $(this).parent(".sub-menu").children("ul").slideToggle("100");
+        $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
       });
-      </script>
+    </script>
   </body>
-  <footer>
-    <div class="footer-container">
-        <div class="footer-section">
-            <h4>Contact Us</h4>
-            <p>Email: support@learnlink.com</p>
-            <p>Phone: +1 234 567 890</p>
-            <p>Address: Isafjordsgatan 30A, Stockholm, Sweden</p>
-        </div>
-        <div class="footer-section">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/faq">FAQ</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <p>&copy; 2024 LearnLink. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
 </html>
