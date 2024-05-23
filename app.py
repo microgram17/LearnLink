@@ -20,6 +20,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///learnlink.db"
 app.config['SECRET_KEY'] = '9d8^7F&4s2@Lp#N6'
 app.config['SECURITY_PASSWORD_SALT'] = 'super-secret-salt'
+app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.html'
 
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -56,10 +57,20 @@ def register():
         db.session.commit()
 
         flash('User successfully registered')
-        return redirect(url_for('security.login'))
+        return redirect(url_for('login'))
 
     return render_template('register_user.html')
 
+@app.route("/login",methods=['GET', 'POST'])
+def login():
+    roles = current_user.roles
+    list_roles = []
+    for role in roles:
+        list_roles.append(role.name)
+    roles = list_roles[0]
+    if request.method == ["POST"]:
+        if role == "Admin":
+            return redirect(url_for("login"))
 
 @app.route("/materials/<int:sub_cat_id>")
 def materials_page(sub_cat_id):
