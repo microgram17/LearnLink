@@ -306,3 +306,19 @@ footer {
 	align-items: center;
 	height: 100vh;
 }
+
+.fs-div input{
+    padding-block: 10px;
+    width: 20%;
+}
+.fs-div .checkbox {
+    padding: 100px;
+}
+
+.fs-div {
+    font-size: 1.6em;
+}
+
+.fs-gap {
+
+}
