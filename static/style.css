@@ -8,6 +8,7 @@
     --hover-blue: #007EA7;
     --text-color: #FFFFFF;
     --black-color: #000000;
+    font-family: "Segoe UI", Helvetica, sans-serif;
 }
 
 /* Reset margins and padding for all elements */
@@ -167,7 +168,7 @@ nav ul li ul li a:hover {
     text-decoration: none;
     text-align: center;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-left: 88%;
+    margin-left: 87%;
 }
 
 .post-button:hover {
