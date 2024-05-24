@@ -13,6 +13,22 @@
     background-color:hsl(218deg 50% 91%);
 }
 
+h1 {
+    font-size: 3em;
+}
+
+img {
+    margin-left: -15px;
+}
+
+.logo {
+    width: 108%; /* Makes the logo fill the width of the sidebar */
+    height: auto; /* Maintains aspect ratio */
+    display: block;
+    margin-bottom: 20px; /* Space below the logo */
+    margin-top: -48%;
+  }
+
 /* Reset margins and padding for all elements */
 * {
     margin: 0;
