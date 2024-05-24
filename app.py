@@ -103,8 +103,6 @@ class PostForm(FlaskForm):
     submit = SubmitField('Create Post')
 
 # Route for Post creation form
-
-
 @app.route('/create_post/<sub_cat_id>', methods=['GET', 'POST'])
 @roles_accepted("Admin", "User")
 @auth_required()
@@ -121,7 +119,7 @@ def create_post(sub_cat_id):
             new_post = Post(
                 post_title=form.post_title.data,
                 post_body=form.post_body.data,
-                user_id=current_user.user_id,  # Placeholder for the user ID since login is not implemented
+                user_id=current_user.user_id,
                 sub_cat_id=sub_cat_id,
                 created_at=datetime.now(),
                 updated_at=datetime.now(),
@@ -150,13 +148,12 @@ def create_post(sub_cat_id):
 
             flash('Post created successfully!', 'success')
             # Replace 'category_page' with the endpoint you want to redirect to
-            return redirect(url_for('category_page'))
+            return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
 
+
 # Jinjia filter to change urls in post body to clickable links
-
-
 def make_links(text):
     # Regular expression to find urls
     url_regex = re.compile(r'(https?://[^\s]+)')
