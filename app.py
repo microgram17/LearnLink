@@ -98,8 +98,7 @@ def view_post(post_id):
 
 
 class PostForm(FlaskForm):
-    post_title = StringField('Title', validators=[
-                             DataRequired(), Length(max=255)])
+    post_title = StringField('Title', validators=[DataRequired(), Length(max=255)])
     post_body = TextAreaField('Body', validators=[DataRequired()])
     submit = SubmitField('Create Post')
 
