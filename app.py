@@ -8,13 +8,13 @@ from seed import seed_data
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length
-from flask_login import login_required, current_user
+# from flask_login import login_required, current_user
 from datetime import datetime
 import re
 from markupsafe import Markup
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
-from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted
+from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
 
 app = Flask(__name__)
 
@@ -122,7 +122,7 @@ def create_post(sub_cat_id):
             new_post = Post(
                 post_title=form.post_title.data,
                 post_body=form.post_body.data,
-                user_id=1,  # Placeholder for the user ID since login is not implemented
+                user_id=current_user.user_id,  # Placeholder for the user ID since login is not implemented
                 sub_cat_id=sub_cat_id,
                 created_at=datetime.now(),
                 updated_at=datetime.now(),
