@@ -8,6 +8,7 @@
     --hover-blue: #007EA7;
     --text-color: #FFFFFF;
     --black-color: #000000;
+    --highlight-color: yellow;
     font-family: "Segoe UI", Helvetica, sans-serif;
     background-color:hsl(218deg 50% 91%);
 }
@@ -64,6 +65,21 @@ nav ul li ul li a {
 
 nav ul li ul li a:hover {
     border-left: 2px solid var(--text-color);
+}
+
+.username-highlight {
+    color: var(--highlight-color); /* Define a variable or use a specific color code */
+}
+
+/* Nav User-name-display */
+nav p {
+    font-size: 1em;
+    color: var(--text-color);
+    display: block;
+    padding: 10px 10px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: 0.2s linear;
 }
 
 /* Responsive styles */
