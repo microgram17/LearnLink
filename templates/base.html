@@ -20,13 +20,14 @@
           <li><p>Logged in as: <span class="username-highlight">{{ current_user.user_name }}</span></p></li>
           <li><a href="/logout">logout</a></li>
           <li><a href="/">Subjects</a></li>
-          <li class="sub-menu">
+          <!-- TODO Hidden since they don't do anything yet -->
+          <!-- <li class="sub-menu">
             <a href="#message">Help</a>
             <ul>
               <li><a href="#settings">FAQ's</a></li>
               <li><a href="">Contact</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
         {% else %}
         <ul>
@@ -34,13 +35,14 @@
           <li><a href="/login">login</a></li>
           <li><a href="/register">Register</a></li>
           <li><a href="/">Subjects</a></li>
-          <li class="sub-menu">
+          <!-- TODO Hidden since they don't do anything yet -->
+          <!-- <li class="sub-menu">
             <a href="#message">Help</a>
             <ul>
               <li><a href="#settings">FAQ's</a></li>
               <li><a href="">Contact</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
         {% endif %}
       </nav>
