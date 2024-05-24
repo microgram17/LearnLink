@@ -99,7 +99,7 @@ def view_post(post_id):
 
 class PostForm(FlaskForm):
     post_title = StringField('Title', validators=[DataRequired(), Length(max=255)])
-    post_body = TextAreaField('Body', validators=[DataRequired()])
+    post_body = TextAreaField('Text', validators=[DataRequired()])
     submit = SubmitField('Create Post')
 
 # Route for Post creation form
