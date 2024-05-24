@@ -14,6 +14,7 @@ import re
 from markupsafe import Markup
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
+from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted
 
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.html'
 db.init_app(app)
 migrate = Migrate(app, db)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+app.security = Security(app, user_datastore)
 
 
 
@@ -106,6 +107,7 @@ class PostForm(FlaskForm):
 
 
 @app.route('/create_post/<sub_cat_id>', methods=['GET', 'POST'])
+@auth_required()
 def create_post(sub_cat_id):
     if request.method == 'GET':
         sub_category = SubCategory.query.get(sub_cat_id)
