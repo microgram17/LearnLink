@@ -8,7 +8,6 @@ from seed import seed_data
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length
-# from flask_login import login_required, current_user
 from datetime import datetime
 import re
 from markupsafe import Markup
