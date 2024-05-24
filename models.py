@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     password = Column(String(255), nullable=False)
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
+    created_at = Column(DateTime())
     fs_uniquifier = Column(String(255), unique=True,
                            nullable=False, default=lambda: str(uuid.uuid4()))
     active = Column(Boolean, default=True)

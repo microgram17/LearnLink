@@ -53,8 +53,9 @@ def register():
             return redirect(url_for('register'))
 
         hashed_password = hash_password(password)
+        created_at = datetime.now()
         user_datastore.create_user(
-            user_name=username, email=email, password=hashed_password, roles=['User'])
+            user_name=username, email=email, password=hashed_password, roles=['User'], created_at=created_at)
         db.session.commit()
 
         flash('User successfully registered')
@@ -106,6 +107,7 @@ class PostForm(FlaskForm):
 
 
 @app.route('/create_post/<sub_cat_id>', methods=['GET', 'POST'])
+@roles_accepted("Admin", "User")
 @auth_required()
 def create_post(sub_cat_id):
     if request.method == 'GET':
