@@ -15,7 +15,7 @@
     <nav>
       {% if current_user.is_authenticated %}
       <ul>
-        <img src="/static/learnlinklogo.svg" alt="Logo"/>
+        <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
           <li><a href="/logout">logout</a></li>
           <li><a href="/">Subjects</a></li>
           <li class="sub-menu">
@@ -28,7 +28,7 @@
         </ul>
         {% else %}
         <ul>
-          <img src="/static/learnlinklogo.svg" alt="Logo"/>
+          <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
           <li><a href="/login">login</a></li>
           <li><a href="/register">Register</a></li>
           <li><a href="/">Subjects</a></li>
