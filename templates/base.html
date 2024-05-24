@@ -12,10 +12,12 @@
 
 
   <body> 
+
     <nav>
       {% if current_user.is_authenticated %}
       <ul>
-        <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
+          <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
+          <li><p>Logged in as: <span class="username-highlight">{{ current_user.user_name }}</span></p></li>
           <li><a href="/logout">logout</a></li>
           <li><a href="/">Subjects</a></li>
           <li class="sub-menu">
