@@ -12,6 +12,14 @@
     background-color:hsl(218deg 50% 91%);
 }
 
+h1 {
+    font-size: 3em;
+}
+
+img {
+    margin-top: -128px;
+}
+
 /* Reset margins and padding for all elements */
 * {
     margin: 0;
