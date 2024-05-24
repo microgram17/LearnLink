@@ -208,19 +208,19 @@ nav p {
 }
 
 /* Post form styling */
-.post-form {
-    margin-left: 15%;
+.create-post {
     font-size: 2rem;
 }
 
-.input-field {
-    padding: 1em;
+.post-title-input {
     width: 80%;
+    padding: 1rem;
     font-size: 1rem;
+    margin: 0;
     margin-bottom: 1em;
 }
 
-.textarea-field {
+.post-textarea-field {
     width: 80%;
     padding: 1em;
     font-size: 1rem;
