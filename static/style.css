@@ -368,6 +368,13 @@ footer {
     font-size: 1.6em;
 }
 
-.fs-gap {
-
+.comments-section {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
