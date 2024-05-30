@@ -122,7 +122,9 @@ def material_page(post_id):
             post_id=post_id,
             user_id=current_user.user_id,
             comment_text=comment_form.comment_text.data,
-            parent_comment_id=request.form.get('parent_comment_id', type=int)
+            parent_comment_id=request.form.get('parent_comment_id', type=int),
+            created_at = datetime.now(),
+            updated_at = datetime.now()
         )
         # Add the new comment to the database and commit the transaction
         db.session.add(new_comment)
