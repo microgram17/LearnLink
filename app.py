@@ -30,6 +30,10 @@ app.security = Security(app, user_datastore)
 
 
 @app.route("/")
+def landing_page():
+    return render_template("landing_page.html")
+
+@app.route("/categories")
 def category_page():
     category = Category.query.all()
     return render_template("category_page.html", category=category)
