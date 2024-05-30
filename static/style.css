@@ -159,6 +159,12 @@ nav p {
     background-color: var(--light-blue);
     color: var(--text-color);
     text-decoration: none;
+    border-radius: 3%;
+}
+
+.box:hover {
+    transform: scale(1.05);
+
 }
 
 /* Material box styling */
