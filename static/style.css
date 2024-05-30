@@ -366,11 +366,6 @@ footer {
     transition: color 0.3s ease;
 }
 
-.container {
-	height: 84.5vh;
-    
-}
-
 .title{
     font-size: 78px;
 }
