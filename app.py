@@ -5,7 +5,7 @@ from models import *
 from flask_migrate import Migrate, upgrade
 import os
 from seed import seed_data
-from forms import PostForm
+from forms import PostForm, CommentForm
 from datetime import datetime
 import re
 from markupsafe import Markup
@@ -78,11 +78,31 @@ def materials_page(sub_cat_id):
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
 
-@app.route("/material/<int:post_id>")
+# View individual posts
+@app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
-    material = Post.query.get(post_id)
-    return render_template("material_page.html", material=material)
+    material = Post.query.get_or_404(post_id)
+    comment_form = CommentForm()
+    
+    if comment_form.validate_on_submit():
+        new_comment = Comments(
+            post_id=post_id,
+            user_id=current_user.user_id,
+            comment_text=comment_form.comment_text.data,
+            parent_comment_id=request.form.get('parent_comment_id', type=int)
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        flash('Comment posted successfully!', 'success')
+        return redirect(url_for('material_page', post_id=post_id))
+    # Fetch top-level comments
+    comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=None).all()
 
+    # Prepare child comments for each top-level comment
+    for comment in comments:
+        comment.child_comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=comment.comment_id).all()
+    
+    return render_template("material_page.html", material=material, comments=comments, comment_form=comment_form)
 
 
 
