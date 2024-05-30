@@ -10,9 +10,16 @@
     <a href="/categories"><button class="takeme">Take me there!</button></a>
     <section class="category-container">
         <div><br>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident atque eveniet mollitia, 
-                voluptatem perspiciatis assumenda possimus quaerat molestiae voluptatibus distinctio ea aut reiciendis vitae dignissimos! Temporibus 
-                corporis eius adipisci quasi dignissimos dolorum quidem dolores hic!</p>
+            <p>On LearnLink you are able to browse and share links with other students.</p>
+        </div><br><br><br>
+        <div class="material-box">
+            {% for post in recent_posts %}
+                <div class="material-sub-box">
+                    <h1>{{ post.post_title }}</h1>
+                    <p>{{ post.post_body | make_links }}</p>
+                    <div class="post-date"><p><em>Posted at: {{ post.created_at.strftime('%H:%M:%S') }}</em></p></div>
+                </div><br>
+            {% endfor %}
         </div>
     </section>
 </section>
