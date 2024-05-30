@@ -174,7 +174,7 @@ nav p {
     justify-content: center;
     align-items: center;
     color: var(--black-color);
-    margin: 25px;
+    margin: 15px;
     width: 90%;
     text-decoration: none;
 }
@@ -183,7 +183,7 @@ nav p {
     position: relative;
     width: 100%; /* Ensure the box takes full width */
     background-color: var(--light-blue);
-    padding: 25px;
+    padding: 15px;
 }
 
 .material-sub-box h1 {
