@@ -12,6 +12,7 @@
             <div class="material-sub-box">
             <h1>{{ material.post_title }}</h1>
             <p>{{ material.post_body}}</p>
+            <div class="post-date"><p><em>Posted at: {{ material.created_at.strftime('%H:%M:%S') }}</em></p></div>
             </div>
         </a>
         {% endfor %}
