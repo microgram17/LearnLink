@@ -186,6 +186,70 @@ def user_seed_data():
         db.session.commit()
 
 
+@app.route("/search", methods=["POST", "GET"])
+def search():
+
+    ###remove links from body-text
+    def remove_links(text):
+    # Regular expression to find urls
+        url_regex = re.compile(r'(https?://[^\s]+)')
+        # Function to replace URLs with anchor tags
+        def replace_remove(match):
+            url = match.group(0)  # Extract Full URLs
+            return f' '
+        # Function to remove URLs
+        return Markup(re.sub(url_regex, replace_remove, text))
+
+# create search_lib strings for each post
+    search_lib = {}
+    posts = Post.query.all()
+    users = User.query.all()
+    subcat = SubCategory.query.all()
+    for k in subcat:
+        for i in posts:
+            if k.sub_category_id == i.sub_cat_id:
+                for j in users:
+                    if i.user_id == j.user_id:
+                        search_lib[i.post_id] = k.sub_category_name + " "
+                        search_lib[i.post_id] += j.email + " "
+                        search_lib[i.post_id] += i.post_title + " "
+                        search_lib[i.post_id] += remove_links(i.post_body)
+
+# vectorize search_lib
+    vector_lib = {}
+    for i in search_lib.keys():
+        vector = search_lib[i].lower()
+        vector = vector.split(' ')
+        for j in range(len(vector)):
+            vector[j].replace(' ', '')
+        vector_lib[i] = set(vector)
+
+    if request.method == "POST":
+        search = request.form.get('search')
+        search = search.lower()
+        search = search.split(' ')
+        for i in range(len(search)):
+            search[i].replace(' ', '')
+        search_kw = set(search)
+        hits = {}
+
+        for i in vector_lib.keys():
+            shared_entries = search_kw.intersection(vector_lib[i])
+
+            if len(search_kw) <=2 and len(shared_entries) >=1:
+                hits[i] = i
+
+            if len(search_kw) >2 and len(search_kw) <=5 and len(shared_entries) >=2:
+                hits[i] = i
+
+            if len(search_kw) >5 and len(shared_entries) >=3:
+                hits[i] = i
+
+        return render_template("search.html", posts=posts, hit_id = hits.keys())
+    return render_template("search.html")
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         upgrade()
