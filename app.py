@@ -92,7 +92,6 @@ def view_post(post_id):
     post = Post.query.get(post_id)
     return render_template('video.html', post=post)
 
-# Model for Post creation form
 
 
 # Route for Post creation form
