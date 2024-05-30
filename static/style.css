@@ -13,6 +13,15 @@
     background-color:hsl(218deg 50% 91%);
 }
 
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+footer{
+    margin-top: auto;
+}
+
 h1 {
     font-size: 3em;
 }
@@ -177,6 +186,11 @@ nav p {
     margin: 15px;
     width: 90%;
     text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.material-box:hover {
+    transform: scale(1.05);
 }
 
 .material-sub-box {
@@ -184,6 +198,7 @@ nav p {
     width: 100%; /* Ensure the box takes full width */
     background-color: var(--light-blue);
     padding: 15px;
+    border-radius: 15px;
 }
 
 .material-sub-box h1 {
@@ -280,7 +295,7 @@ footer {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
