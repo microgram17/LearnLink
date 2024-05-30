@@ -5,9 +5,7 @@ from models import *
 from flask_migrate import Migrate, upgrade
 import os
 from seed import seed_data
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Length
+from forms import PostForm
 from datetime import datetime
 import re
 from markupsafe import Markup
@@ -96,11 +94,6 @@ def view_post(post_id):
 
 # Model for Post creation form
 
-
-class PostForm(FlaskForm):
-    post_title = StringField('Post Title', validators=[DataRequired(), Length(max=255)])
-    post_body = TextAreaField('Post Text', validators=[DataRequired()])
-    submit = SubmitField('Create Post')
 
 # Route for Post creation form
 @app.route('/create_post/<sub_cat_id>', methods=['GET', 'POST'])
