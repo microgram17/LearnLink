@@ -12,15 +12,15 @@
         <div><br>
             <p>On LearnLink you are able to browse and share links with other students.</p>
         </div><br><br><br>
-        <div class="material-box">
-            {% for post in recent_posts %}
+        {% for post in recent_posts %}
+        <a class="material-box" href="{{ url_for('material_page', post_id=post.post_id) }}">
                 <div class="material-sub-box">
                     <h1>{{ post.post_title }}</h1>
-                    <p>{{ post.post_body | make_links }}</p>
+                    <p>{{ post.post_body}}</p>
                     <div class="post-date"><p><em>Posted at: {{ post.created_at.strftime('%H:%M:%S') }}</em></p></div>
-                </div><br>
-            {% endfor %}
-        </div>
+                </div>
+        </a>
+        {% endfor %}
     </section>
 </section>
 {% endblock %}
