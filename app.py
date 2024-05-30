@@ -31,7 +31,8 @@ app.security = Security(app, user_datastore)
 
 @app.route("/")
 def landing_page():
-    return render_template("landing_page.html")
+    recent_posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    return render_template("landing_page.html", recent_posts=recent_posts)
 
 @app.route("/categories")
 def category_page():
