@@ -6,12 +6,13 @@
 <section class="content">
     <h1>LearnLink</h1><br>
     <h2>The easiest way to find great study resources</h2><br>
-    <h3>With various fields of study to browse from, on LearnLink you can find a resource for your upcoming exam in minutes</h3><br>
+    <h3>With various fields of study to browse from, on LearnLink you can find a resource for your upcoming exam in minutes!</h3><br>
     <a href="/categories"><button class="takeme">Take me there!</button></a>
     <section class="category-container">
         <div><br>
-            <p>On LearnLink you are able to browse and share links with other students.</p>
-        </div><br><br><br>
+            <h3>On LearnLink you are able to browse links that other studens have found useful.</h3>
+            <h2>Recent posts</h2>
+        </div>
         {% for post in recent_posts %}
         <a class="material-box" href="{{ url_for('material_page', post_id=post.post_id) }}">
                 <div class="material-sub-box">
