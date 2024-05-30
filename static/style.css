@@ -83,6 +83,11 @@ nav ul li ul li a:hover {
     border-left: 2px solid var(--text-color);
 }
 
+.logoanch {
+    all: initial;
+    cursor: pointer;
+}
+
 .username-highlight {
     color: var(--highlight-color); /* Define a variable or use a specific color code */
 }
@@ -370,4 +375,31 @@ footer {
 
 .fs-gap {
 
+}
+
+.takeme {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: var(--hover-blue);
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.takeme:hover {
+    background-color: var(--light-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.takeme:active {
+    background-color: var(--light-blue);
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
