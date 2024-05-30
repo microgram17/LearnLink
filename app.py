@@ -83,14 +83,7 @@ def material_page(post_id):
     material = Post.query.get(post_id)
     return render_template("material_page.html", material=material)
 
-# Place holder för att titta på posts manuellet
 
-
-@app.route('/post/<int:post_id>')
-def view_post(post_id):
-    # Assuming you have a function to fetch a post by its ID
-    post = Post.query.get(post_id)
-    return render_template('video.html', post=post)
 
 
 
