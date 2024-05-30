@@ -1,0 +1,29 @@
+<div class="comment">
+    <p><strong>{{ comment.user.user_name }}:</strong> {{ comment.comment_text }}</p>
+    <a href="#" onclick="showReplyForm({{ comment.comment_id }})">Reply</a>
+    <div id="reply-form-{{ comment.comment_id }}" style="display:none;">
+        <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+            {{ comment_form.hidden_tag() }}
+            <div class="form-group">
+                {{ comment_form.comment_text.label }}
+                {{ comment_form.comment_text(class="form-control") }}
+            </div>
+            <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+            <div class="form-group">
+                {{ comment_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    {% if comment.child_comments %}
+        <div class="child-comments" style="margin-left: 20px;">
+            {% for child_comment in comment.child_comments %}
+                <div class="comment">
+                    <p><strong>{{ child_comment.user.user_name }}:</strong> {{ child_comment.comment_text }}</p>
+                    <!-- You can add reply form for child comments here if needed -->
+                    <!-- Adjust indentation and styling as necessary -->
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
