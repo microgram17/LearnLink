@@ -159,12 +159,12 @@ nav p {
     background-color: var(--light-blue);
     color: var(--text-color);
     text-decoration: none;
-    border-radius: 3%;
+    border-radius: 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .box:hover {
     transform: scale(1.05);
-
 }
 
 /* Material box styling */
