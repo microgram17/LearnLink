@@ -4,13 +4,18 @@
 
 {% block content %}
 <section class="content">
+    <!-- Section for displaying the material post content -->
     <section class="content-21">
         <div class="post-content-21">
+            <!-- Display the title of the material post -->
             <h1>{{ material.post_title }}</h1>
+            <!-- Display the body of the material post, applying link formatting and marking it safe for HTML rendering -->
             <p>{{ material.post_body | make_links | safe }}</p>
+            <!-- Loop through the attached files and embed videos if the file type is 'video' -->
             {% for attachment in material.files_attached %}
                 {% if attachment.file_type == 'video' %}
                     <div>
+                        <!-- Embed YouTube video using the file URL -->
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ attachment.file_url.split('/')[-1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 {% endif %}
@@ -18,33 +23,51 @@
         </div>
     </section>
 
+    <!-- Section for displaying and adding comments -->
     <section class="comments-section">
         <h2>Comments</h2>
+        <!-- Form for adding a new top-level comment -->
         <form method="POST">
+            <!-- Hidden CSRF token to protect against cross-site request forgery -->
             {{ comment_form.hidden_tag() }}
             <div class="form-group">
+                <!-- Label for the comment text input field -->
                 {{ comment_form.comment_text.label }}
+                <!-- Input field for the comment text -->
                 {{ comment_form.comment_text(class="form-control") }}
             </div>
             <div class="form-group">
+                <!-- Submit button for the comment form -->
                 {{ comment_form.submit(class="btn btn-primary") }}
             </div>
         </form>
 
+        <!-- Container for displaying the comments -->
         <div class="comments">
+            <!-- Loop through the comments, using the depth to adjust indentation -->
             {% for comment, depth in comments %}
+                <!-- Each comment is displayed with indentation based on its depth -->
                 <div class="comment" style="margin-left: {{ depth * 20 }}px; border-left: 1px solid #ccc; padding-left: 10px;">
+                    <!-- Display the username of the commenter and the comment text -->
                     <p><strong>{{ comment.user.user_name }}:</strong> {{ comment.comment_text }}</p>
+                    <!-- Link to show the reply form for the current comment -->
                     <a href="#" onclick="showReplyForm({{ comment.comment_id }})">Reply</a>
+                    <!-- Hidden reply form that becomes visible when the "Reply" link is clicked -->
                     <div id="reply-form-{{ comment.comment_id }}" style="display:none;">
+                        <!-- Form for submitting a reply to the current comment -->
                         <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+                            <!-- Hidden CSRF token to protect against cross-site request forgery -->
                             {{ comment_form.hidden_tag() }}
                             <div class="form-group">
+                                <!-- Label for the reply text input field -->
                                 {{ comment_form.comment_text.label }}
+                                <!-- Input field for the reply text -->
                                 {{ comment_form.comment_text(class="form-control") }}
                             </div>
+                            <!-- Hidden input field to store the ID of the parent comment -->
                             <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
                             <div class="form-group">
+                                <!-- Submit button for the reply form -->
                                 {{ comment_form.submit(class="btn btn-primary") }}
                             </div>
                         </form>
@@ -56,9 +79,13 @@
 </section>
 
 <script>
+    /**
+     * Function to show the reply form for a specific comment.
+     * @param {number} commentId - The ID of the comment to reply to.
+     */
     function showReplyForm(commentId) {
         var replyForm = document.getElementById('reply-form-' + commentId);
-        replyForm.style.display = 'block';
+        replyForm.style.display = 'block'; // Make the reply form visible
     }
 </script>
 {% endblock %}
