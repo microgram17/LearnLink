@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, backref
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import UserMixin, RoleMixin
 import uuid
+import datetime
 
 db = SQLAlchemy()
 
@@ -29,6 +30,7 @@ class User(db.Model, UserMixin):
     password = Column(String(255), nullable=False)
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
+    created_at = Column(DateTime())
     fs_uniquifier = Column(String(255), unique=True,
                            nullable=False, default=lambda: str(uuid.uuid4()))
     active = Column(Boolean, default=True)
@@ -84,17 +86,15 @@ class Comments(db.Model):
     comment_id = Column(Integer, primary_key=True)
     post_id = Column(Integer, ForeignKey('posts.post_id'))
     user_id = Column(Integer, ForeignKey('users.user_id'))
-    parent_comment_id = Column(Integer, ForeignKey('comments.comment_id'))
+    parent_comment_id = Column(Integer, ForeignKey('comments.comment_id'), nullable=True)
     comment_text = Column(String(255))
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
 
     user = relationship('User', back_populates='created_comments')
     related_post = relationship('Post', back_populates='related_comments')
-    comment_rating = relationship(
-        'CommentRating', back_populates='rated_comments', uselist=False)
-    parent_comment = relationship('Comments', remote_side=[
-                                  comment_id], backref='child_comments')
+    comment_rating = relationship('CommentRating', back_populates='rated_comments', uselist=False)
+    parent_comment = relationship('Comments', remote_side=[comment_id], backref='child_comments')
 
 
 class Tags(db.Model):

@@ -8,13 +8,12 @@ from seed import seed_data
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length
-from flask_login import login_required, current_user
 from datetime import datetime
 import re
 from markupsafe import Markup
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
-from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted
+from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
 
 app = Flask(__name__)
 
@@ -53,8 +52,9 @@ def register():
             return redirect(url_for('register'))
 
         hashed_password = hash_password(password)
+        created_at = datetime.now()
         user_datastore.create_user(
-            user_name=username, email=email, password=hashed_password, roles=['User'])
+            user_name=username, email=email, password=hashed_password, roles=['User'], created_at=created_at)
         db.session.commit()
 
         flash('User successfully registered')
@@ -103,9 +103,8 @@ class PostForm(FlaskForm):
     submit = SubmitField('Create Post')
 
 # Route for Post creation form
-
-
 @app.route('/create_post/<sub_cat_id>', methods=['GET', 'POST'])
+@roles_accepted("Admin", "User")
 @auth_required()
 def create_post(sub_cat_id):
     if request.method == 'GET':
@@ -120,7 +119,7 @@ def create_post(sub_cat_id):
             new_post = Post(
                 post_title=form.post_title.data,
                 post_body=form.post_body.data,
-                user_id=1,  # Placeholder for the user ID since login is not implemented
+                user_id=current_user.user_id,
                 sub_cat_id=sub_cat_id,
                 created_at=datetime.now(),
                 updated_at=datetime.now(),
@@ -149,13 +148,12 @@ def create_post(sub_cat_id):
 
             flash('Post created successfully!', 'success')
             # Replace 'category_page' with the endpoint you want to redirect to
-            return redirect(url_for('category_page'))
+            return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
 
+
 # Jinjia filter to change urls in post body to clickable links
-
-
 def make_links(text):
     # Regular expression to find urls
     url_regex = re.compile(r'(https?://[^\s]+)')
