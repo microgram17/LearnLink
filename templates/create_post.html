@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="content">
+    <section class="create-post">
+        <h1>Create Post for {{ sub_category.sub_category_name }}</h1>
+        <form class="post-form" method="POST" action="{{ url_for('create_post', sub_cat_id=sub_cat_id) }}">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.post_title.label }}<br>
+                {{ form.post_title(class="post-title-input", placeholder="Write the Title for your post here.") }}<br>
+                {% for error in form.post_title.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.post_body.label }}<br>
+                {{ form.post_body(rows=10, cols= 80, class="post-textarea-field", placeholder="Write your main post text here. You can include links, such as URLs, to websites or videos. For example, you can paste a YouTube link like this: https://www.youtube.com/watch?v=example_video_id") }}<br>
+                {% for error in form.post_body.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+                {% endfor %}
+            </p>
+            <p class="submit-button">{{ form.submit() }}</p>
+        </form>
+    </section>
+</section>
+{% endblock %}

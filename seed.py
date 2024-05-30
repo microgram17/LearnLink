@@ -1,14 +1,13 @@
 from models import db, Category, SubCategory
+import json
 
 def seed_data():
-    # Category seed data
-    categories_data = [
-        {'category_name': 'Programming'},
-        {'category_name': 'Math'},
-        {'category_name': 'Language'},
-        {'category_name': 'Chemistry'},
-        {'category_name': 'Physics'},
-    ]
+    
+    with open("seed_data.json") as file:
+        data = json.load(file)
+
+    categories_data = data["categories"]
+    subcategories_data = data["subcategories"]
 
     # Dictionary to store created categories by name
     categories = {}
@@ -25,12 +24,7 @@ def seed_data():
         else:
             categories[category_name] = existing_category.category_id
 
-    # SubCategory seed data
-    subcategories_data = [
-        {'sub_category_name': 'Python', 'category_name': 'Programming'},
-        {'sub_category_name': 'JavaScript', 'category_name': 'Programming'}
-    ]
-
+    
     # Check for existing subcategories and add new ones
     for subcategory_data in subcategories_data:
         sub_category_name = subcategory_data['sub_category_name']
