@@ -16,13 +16,9 @@
     </div>
 
     {% if comment.child_comments %}
-        <div class="child-comments" style="margin-left: 20px;">
+        <div class="child-comments" style="margin-left: 20px; border-left: 1px solid #ccc; padding-left: 10px;">
             {% for child_comment in comment.child_comments %}
-                <div class="comment">
-                    <p><strong>{{ child_comment.user.user_name }}:</strong> {{ child_comment.comment_text }}</p>
-                    <!-- You can add reply form for child comments here if needed -->
-                    <!-- Adjust indentation and styling as necessary -->
-                </div>
+                {% include 'comment.html' with context %}
             {% endfor %}
         </div>
     {% endif %}
