@@ -78,12 +78,45 @@ def materials_page(sub_cat_id):
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
 
-# View individual posts
+# Function to recursively fetch child comments for a given comment
+def fetch_child_comments(comment, depth=0):
+    """
+    Recursively fetch child comments and include their depth level.
+    Args:
+    - comment: The parent comment object.
+    - depth: The current depth level of the comment in the hierarchy.
+    
+    Returns:
+    - A list of tuples where each tuple contains a comment object and its depth level.
+    """
+    child_comments = []
+    
+    # Query to fetch child comments of the given comment
+    comments = Comments.query.filter_by(parent_comment_id=comment.comment_id).all()
+    
+    for child_comment in comments:
+        # Append the child comment and its depth to the list
+        child_comments.append((child_comment, depth + 1))
+        # Recursively fetch and append the child comments of the current child comment
+        child_comments.extend(fetch_child_comments(child_comment, depth + 1))
+    
+    return child_comments
+
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
+    """
+    View function to handle the material page, including displaying and adding comments.
+    Args:
+    - post_id: The ID of the material post.
+    
+    Returns:
+    - Rendered HTML template for the material page.
+    """
+    # Fetch the material post using the provided post_id, 404 if not found
     material = Post.query.get_or_404(post_id)
     comment_form = CommentForm()
-    
+
+    # Handle form submission for new comments
     if comment_form.validate_on_submit():
         new_comment = Comments(
             post_id=post_id,
@@ -91,18 +124,26 @@ def material_page(post_id):
             comment_text=comment_form.comment_text.data,
             parent_comment_id=request.form.get('parent_comment_id', type=int)
         )
+        # Add the new comment to the database and commit the transaction
         db.session.add(new_comment)
         db.session.commit()
         flash('Comment posted successfully!', 'success')
         return redirect(url_for('material_page', post_id=post_id))
-    # Fetch top-level comments
-    comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=None).all()
 
-    # Prepare child comments for each top-level comment
+    # Fetch top-level comments (comments without a parent)
+    comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=None).all()
+    all_comments = []
+
+    # Iterate over top-level comments to fetch their child comments
     for comment in comments:
-        comment.child_comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=comment.comment_id).all()
-    
-    return render_template("material_page.html", material=material, comments=comments, comment_form=comment_form)
+        # Append the top-level comment with depth 0
+        all_comments.append((comment, 0))
+        # Recursively fetch and append child comments
+        all_comments.extend(fetch_child_comments(comment, 0))
+
+    # Render the material page template with the material post, comments, and comment form
+    return render_template("material_page.html", material=material, comments=all_comments, comment_form=comment_form)
+
 
 
 
