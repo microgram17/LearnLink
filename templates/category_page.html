@@ -9,9 +9,8 @@
     <h2>Available subjects</h2>
     <section class="category-container">
         {% for category in category%}
-        <a class="box" href="{{ url_for('category_page_by_id', category_id=category.category_id) }}"><div class="box">
-            <p>{{ category.category_name }}</p>
-        </div></a>
+        <a class="box" href="{{ url_for('category_page_by_id', category_id=category.category_id) }}">
+            <p>{{ category.category_name }}</p></a>
         {% endfor %}
     </section>
 </section>
