@@ -1,25 +1,50 @@
 <div class="comment">
+    <!-- Display the comment's user and text -->
     <p><strong>{{ comment.user.user_name }}:</strong> {{ comment.comment_text }}</p>
+
+    <!-- Link to show the reply form for the current comment -->
     <a href="#" onclick="showReplyForm({{ comment.comment_id }})">Reply</a>
+
+    <!-- Hidden reply form that becomes visible when the "Reply" link is clicked -->
     <div id="reply-form-{{ comment.comment_id }}" style="display:none;">
+        <!-- Form for submitting a reply to the current comment -->
         <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+            <!-- Hidden CSRF token to protect against cross-site request forgery -->
             {{ comment_form.hidden_tag() }}
             <div class="form-group">
+                <!-- Label for the comment text input field -->
                 {{ comment_form.comment_text.label }}
+                <!-- Input field for the comment text -->
                 {{ comment_form.comment_text(class="form-control") }}
             </div>
+            <!-- Hidden input field to store the ID of the parent comment -->
             <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
             <div class="form-group">
+                <!-- Submit button for the reply form -->
                 {{ comment_form.submit(class="btn btn-primary") }}
             </div>
         </form>
     </div>
 
+    <!-- Check if the current comment has any child comments -->
     {% if comment.child_comments %}
+        <!-- Container for child comments, styled to be indented and separated -->
         <div class="child-comments" style="margin-left: 20px; border-left: 1px solid #ccc; padding-left: 10px;">
+            <!-- Loop through each child comment and include the 'comment.html' template for each -->
             {% for child_comment in comment.child_comments %}
                 {% include 'comment.html' with context %}
             {% endfor %}
         </div>
     {% endif %}
 </div>
+
+<script>
+    /**
+     * Function to show the reply form for a specific comment.
+     * @param {number} commentId - The ID of the comment to reply to.
+     */
+    function showReplyForm(commentId) {
+        var replyForm = document.getElementById('reply-form-' + commentId);
+        replyForm.style.display = 'block'; // Make the reply form visible
+    }
+</script>
