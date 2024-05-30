@@ -368,6 +368,8 @@ footer {
     font-size: 1.6em;
 }
 
+/*  Comment section styling */
+
 .comments-section {
     max-width: 600px;
     margin: 0 auto;
@@ -377,4 +379,17 @@ footer {
     background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+}
+
+.comment {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.child-comments {
+    margin-left: 20px;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
 }
