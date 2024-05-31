@@ -13,19 +13,11 @@ from sqlalchemy.orm import joinedload
 import bleach
 from flask_wtf import CSRFProtect
 from sqlalchemy.exc import OperationalError
-
+import config
 
 app = Flask(__name__)
+app.config.from_object(config.Config)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///learnlink.db"
-app.config['SECRET_KEY'] = '9d8^7F&4s2@Lp#N6'
-app.config['SECURITY_PASSWORD_SALT'] = 'super-secret-salt'
-app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.html'
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Lax',
-)
 
 # csrf = CSRFProtect(app)
 db.init_app(app)
