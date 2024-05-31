@@ -184,7 +184,7 @@ nav p {
     align-items: center;
     color: var(--black-color);
     margin: 15px;
-    width: 90%;
+    width: 95%;
     text-decoration: none;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -429,4 +429,24 @@ footer {
 
 .landing-text {
     font-size: 1.4rem;
+}
+
+.about-us {
+    max-width: 60%;
+    font-size: 1.2rem;
+}
+
+.about-us h1 {
+    max-width: 60%;
+    font-size: 2rem;
+    margin: 10px;
+}
+
+.about-us ul {
+    margin-left: 30px;
+}
+
+.about-us img{
+    margin-top: 65px;
+    margin-left: -150px;
 }
