@@ -8,7 +8,7 @@ from datetime import datetime
 import re
 from markupsafe import Markup
 from flask_security.utils import hash_password
-from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore
+from flask_security import current_user, auth_required, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore
 from sqlalchemy.orm import joinedload
 import bleach
 
