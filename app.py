@@ -254,31 +254,6 @@ def create_post(sub_cat_id):
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
 
-
-# Jinjia filter to change urls in post body to clickable links
-def make_links(text):
-    # Regular expression to find urls
-    url_regex = re.compile(r'(https?://[^\s]+)')
-    # Function to replace URLs with anchor tags
-
-    def replace(match):
-        url = match.group(0)  # Extract Full URLs
-        # return url as a clickable link
-        return f'<a href="{url}" target="_blank">{url}</a><br>'
-    # Function to replace URLs with anchor tags
-    return Markup(re.sub(url_regex, replace, text))
-
-
-app.jinja_env.filters['make_links'] = make_links
-
-def user_seed_data():
-
-    if not Role.query.first():
-        user_datastore.create_role(name='Admin')
-        user_datastore.create_role(name='User')
-        db.session.commit()
-
-
 @app.route("/search", methods=["POST", "GET"])
 def search():
 
@@ -341,6 +316,39 @@ def search():
         return render_template("search.html", posts=posts, hit_id = hits.keys())
     return render_template("search.html")
 
+
+# Jinjia filter to change urls in post body to clickable links
+def make_links(text):
+    # Regular expression to find urls
+    url_regex = re.compile(r'(https?://[^\s]+)')
+    # Function to replace URLs with anchor tags
+
+    def replace(match):
+        url = match.group(0)  # Extract Full URLs
+        # return url as a clickable link
+        return f'<a href="{url}" target="_blank">{url}</a><br>'
+    # Function to replace URLs with anchor tags
+    return Markup(re.sub(url_regex, replace, text))
+
+
+app.jinja_env.filters['make_links'] = make_links
+
+
+def user_seed_data():
+
+    if not Role.query.first():
+        user_datastore.create_role(name='Admin')
+        user_datastore.create_role(name='User')
+        db.session.commit()
+
+    if not User.query.first():
+        user_datastore.create_user(
+            user_name='Admin', email='test@example.com', password=hash_password('password'), roles=['Admin'], created_at=datetime.now())
+        user_datastore.create_user(
+            user_name='Both', email='both@role.com', password=hash_password('password'), roles=['Admin', 'User'], created_at=datetime.now())
+        user_datastore.create_user(
+            user_name='tomato', email='tomato@farmer.com', password=hash_password('tomato'), roles=['User'], created_at=datetime.now())
+        db.session.commit()
 
 
 if __name__ == '__main__':
