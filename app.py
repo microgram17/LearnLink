@@ -12,6 +12,7 @@ from markupsafe import Markup
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
 from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
+from sqlalchemy.orm import joinedload
 
 app = Flask(__name__)
 
@@ -102,21 +103,52 @@ def fetch_child_comments(comment, depth=0):
     
     return child_comments
 
+def build_comment_tree(comments):
+    """
+    Build a nested comment tree from a flat list of comments.
+    Args:
+    - comments: List of comment objects.
+
+    Returns:
+    - A list of root comments with nested child comments.
+    """
+    comment_dict = {comment.comment_id: comment for comment in comments}
+    for comment in comments:
+        comment.child_comments = []
+    root_comments = []
+
+    for comment in comments:
+        if comment.parent_comment_id is None:
+            root_comments.append(comment)
+        else:
+            parent = comment_dict.get(comment.parent_comment_id)
+            if parent:
+                parent.child_comments.append(comment)
+
+    # Debugging: Print the comment tree structure
+    def print_comment_tree(comments, level=0):
+        for comment in comments:
+            print("  " * level + f"Comment ID: {comment.comment_id}, Parent ID: {comment.parent_comment_id}")
+            if comment.child_comments:
+                print_comment_tree(comment.child_comments, level + 1)
+
+    print_comment_tree(root_comments)
+
+    return root_comments
+
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
     """
     View function to handle the material page, including displaying and adding comments.
     Args:
     - post_id: The ID of the material post.
-    
+
     Returns:
     - Rendered HTML template for the material page.
     """
-    # Fetch the material post using the provided post_id, 404 if not found
     material = Post.query.get_or_404(post_id)
     comment_form = CommentForm()
 
-    # Handle form submission for new comments
     if comment_form.validate_on_submit():
         new_comment = Comments(
             post_id=post_id,
@@ -126,25 +158,25 @@ def material_page(post_id):
             created_at = datetime.now(),
             updated_at = datetime.now()
         )
-        # Add the new comment to the database and commit the transaction
         db.session.add(new_comment)
         db.session.commit()
         flash('Comment posted successfully!', 'success')
         return redirect(url_for('material_page', post_id=post_id))
 
-    # Fetch top-level comments (comments without a parent)
-    comments = Comments.query.filter_by(post_id=post_id, parent_comment_id=None).all()
-    all_comments = []
-
-    # Iterate over top-level comments to fetch their child comments
+    # Fetch all comments for the post, including their parent-child relationships
+    comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
+    
+    # Debugging: Print fetched comments
     for comment in comments:
-        # Append the top-level comment with depth 0
-        all_comments.append((comment, 0))
-        # Recursively fetch and append child comments
-        all_comments.extend(fetch_child_comments(comment, 0))
+        print(f"Fetched Comment ID: {comment.comment_id}, Parent ID: {comment.parent_comment_id}")
 
-    # Render the material page template with the material post, comments, and comment form
-    return render_template("material_page.html", material=material, comments=all_comments, comment_form=comment_form)
+    # Build the nested comment tree
+    root_comments = build_comment_tree(comments)
+
+    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form)
+
+
+
 
 
 
