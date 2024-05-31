@@ -20,14 +20,13 @@
           <li><a href="/categories">Subjects</a></li>
           <li><p>Logged in as: <span class="username-highlight">{{ current_user.user_name }}</span></p></li>
           <li><a href="/logout">logout</a></li>
-          <!-- TODO Hidden since they don't do anything yet -->
-          <!-- <li class="sub-menu">
-            <a href="#message">Help</a>
+          <li class="sub-menu">
+            <a href="#message">Other</a>
             <ul>
-              <li><a href="#settings">FAQ's</a></li>
-              <li><a href="">Contact</a></li>
+              <li><a href="/faq">FAQ's</a></li>
+              <li><a href="/about">About us</a></li>
             </ul>
-          </li> -->
+          </li>
         </ul>
         {% else %}
         <ul>
@@ -35,14 +34,13 @@
           <li><a href="/categories">Subjects</a></li>
           <li><a href="/login">login</a></li>
           <li><a href="/register">Register</a></li>
-          <!-- TODO Hidden since they don't do anything yet -->
-          <!-- <li class="sub-menu">
-            <a href="#message">Help</a>
+          <li class="sub-menu">
+            <a href="#message">Other</a>
             <ul>
-              <li><a href="#settings">FAQ's</a></li>
-              <li><a href="">Contact</a></li>
+              <li><a href="/faq">FAQ's</a></li>
+              <li><a href="/about">About us</a></li>
             </ul>
-          </li> -->
+          </li>
         </ul>
         {% endif %}
       </nav>
