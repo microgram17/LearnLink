@@ -12,6 +12,7 @@ from flask_security import current_user, auth_required, permissions_accepted, ro
 from sqlalchemy.orm import joinedload
 import bleach
 from flask_wtf import CSRFProtect
+from sqlalchemy.exc import OperationalError
 
 
 app = Flask(__name__)
@@ -341,15 +342,59 @@ def user_seed_data():
         user_datastore.create_role(name='User')
         db.session.commit()
 
-    if not User.query.first():
-        user_datastore.create_user(
-            user_name='Admin', email='test@example.com', password=hash_password('password'), roles=['Admin'], created_at=datetime.now())
-        user_datastore.create_user(
-            user_name='Both', email='both@role.com', password=hash_password('password'), roles=['Admin', 'User'], created_at=datetime.now())
-        user_datastore.create_user(
-            user_name='tomato', email='tomato@farmer.com', password=hash_password('tomato'), roles=['User'], created_at=datetime.now())
-        db.session.commit()
+    # Define the users you want to create or update
+    users = [
+        {
+            "user_name": "Admin",
+            "email": "test@example.com",
+            "password": "password",
+            "roles": ["Admin"],
+        },
+        {
+            "user_name": "Both",
+            "email": "both@role.com",
+            "password": "password",
+            "roles": ["Admin", "User"],
+        },
+        {
+            "user_name": "tomato",
+            "email": "tomato@farmer.com",
+            "password": "tomato",
+            "roles": ["User"],
+        }
+    ]
 
+    try:
+        with db.session.no_autoflush:
+            for user_info in users:
+                user = User.query.filter_by(email=user_info["email"]).first()
+                if user:
+                    # Update user details if they differ
+                    needs_update = False
+                    if user.user_name != user_info["user_name"]:
+                        user.user_name = user_info["user_name"]
+                        needs_update = True
+                    if not user.password or not user.password.startswith("pbkdf2:sha256"):
+                        user.password = hash_password(user_info["password"])
+                        needs_update = True
+                    if set(role.name for role in user.roles) != set(user_info["roles"]):
+                        user.roles = [user_datastore.find_or_create_role(role) for role in user_info["roles"]]
+                        needs_update = True
+                    if needs_update:
+                        user.created_at = datetime.now()  # Update timestamp if any changes
+                else:
+                    # Create user if not exists
+                    user_datastore.create_user(
+                        user_name=user_info["user_name"],
+                        email=user_info["email"],
+                        password=hash_password(user_info["password"]),
+                        roles=user_info["roles"],
+                        created_at=datetime.now()
+                    )
+            db.session.commit()
+    except OperationalError as e:
+        print(f"OperationalError: {e}")
+        db.session.rollback()
 
 if __name__ == '__main__':
     with app.app_context():
