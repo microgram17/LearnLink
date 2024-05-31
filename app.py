@@ -13,6 +13,7 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
 from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
 from sqlalchemy.orm import joinedload
+import bleach
 
 app = Flask(__name__)
 
@@ -27,6 +28,16 @@ user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 app.security = Security(app, user_datastore)
 
 
+def sanitize_input(input_text):
+    allowed_tags = ['b', 'i', 'u', 'em', 'strong', 'a']
+    allowed_attributes = {'a': ['href', 'title']}
+    cleaned_text = bleach.clean(input_text, tags=allowed_tags, attributes=allowed_attributes)
+    return cleaned_text
+
+@app.after_request
+def apply_csp(response):
+    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
+    return response
 
 @app.route("/")
 def category_page():
@@ -149,30 +160,27 @@ def material_page(post_id):
     material = Post.query.get_or_404(post_id)
     comment_form = CommentForm()
 
-    if comment_form.validate_on_submit():
-        new_comment = Comments(
-            post_id=post_id,
-            user_id=current_user.user_id,
-            comment_text=comment_form.comment_text.data,
-            parent_comment_id=request.form.get('parent_comment_id', type=int),
-            created_at = datetime.now(),
-            updated_at = datetime.now()
-        )
-        db.session.add(new_comment)
-        db.session.commit()
-        flash('Comment posted successfully!', 'success')
-        return redirect(url_for('material_page', post_id=post_id))
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            flash('You need to be logged in to comment.', 'danger')
+            return redirect(url_for('login', next=request.url))
 
-    # Fetch all comments for the post, including their parent-child relationships
+        if comment_form.validate_on_submit():
+            new_comment = Comments(
+                post_id=post_id,
+                user_id=current_user.user_id,
+                comment_text=sanitize_input(comment_form.comment_text.data),
+                parent_comment_id=request.form.get('parent_comment_id', type=int),
+                created_at=datetime.now(),
+                updated_at=datetime.now()
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+            flash('Comment posted successfully!', 'success')
+            return redirect(url_for('material_page', post_id=post_id))
+
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
-    
-    # Debugging: Print fetched comments
-    for comment in comments:
-        print(f"Fetched Comment ID: {comment.comment_id}, Parent ID: {comment.parent_comment_id}")
-
-    # Build the nested comment tree
     root_comments = build_comment_tree(comments)
-
     return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form)
 
 
@@ -197,8 +205,8 @@ def create_post(sub_cat_id):
 
         if form.validate_on_submit():
             new_post = Post(
-                post_title=form.post_title.data,
-                post_body=form.post_body.data,
+                post_title=sanitize_input(form.post_title.data),
+                post_body=sanitize_input(form.post_body.data),
                 user_id=current_user.user_id,
                 sub_cat_id=sub_cat_id,
                 created_at=datetime.now(),
