@@ -1,5 +1,3 @@
-from flask_security import Security, SQLAlchemyUserDatastore
-from flask_security.utils import hash_password
 from flask import Flask, render_template, request, flash, redirect, url_for
 from models import *
 from flask_migrate import Migrate, upgrade
@@ -9,9 +7,8 @@ from forms import PostForm, CommentForm
 from datetime import datetime
 import re
 from markupsafe import Markup
-from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password
-from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
+from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore
 from sqlalchemy.orm import joinedload
 import bleach
 
@@ -262,15 +259,6 @@ def user_seed_data():
     if not Role.query.first():
         user_datastore.create_role(name='Admin')
         user_datastore.create_role(name='User')
-        db.session.commit()
-
-    if not User.query.first():
-        user_datastore.create_user(
-            email='test@example.com', password=hash_password('password'), roles=['Admin', 'User'])
-        user_datastore.create_user(
-            email='c@c.com', password=hash_password('password'), roles=['User'])
-        user_datastore.create_user(
-            email='d@d.com', password=hash_password('password'), roles=['Admin'])
         db.session.commit()
 
 
