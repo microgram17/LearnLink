@@ -26,7 +26,7 @@ app.config.update(
     SESSION_COOKIE_SAMESITE='Lax',
 )
 
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app)
 db.init_app(app)
 migrate = Migrate(app, db)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -39,14 +39,14 @@ def sanitize_input(input_text):
     cleaned_text = bleach.clean(input_text, tags=allowed_tags, attributes=allowed_attributes)
     return cleaned_text
 
-@app.after_request
-def apply_csp(response):
-    response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    response.headers['Referrer-Policy'] = 'no-referrer'
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    return response
+# @app.after_request
+# def apply_csp(response):
+#     response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
+#     response.headers['X-Content-Type-Options'] = 'nosniff'
+#     response.headers['X-XSS-Protection'] = '1; mode=block'
+#     response.headers['Referrer-Policy'] = 'no-referrer'
+#     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+#     return response
 
 @app.route("/")
 def category_page():
