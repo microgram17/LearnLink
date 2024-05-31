@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="content">
+
+    <h1>Matched Searches</h1>
+
+    <section>
+    {% for id in hit_id %}
+    {% for post in posts %}
+    {% if post.post_id == id %}
+
+    <a class="material-box" href ="/material/{{ id }}">
+        <div class="material-sub-box">
+        <h1>{{ post.post_title }}</h1>
+        <p>{{ post.post_body }}</p>
+        </div>
+    </a>
+
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+</section>
+</section>
+{% endblock %}
