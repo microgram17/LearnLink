@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired, Length
 from datetime import datetime
 import re
 from markupsafe import Markup
-from flask_security import Security, SQLAlchemyUserDatastore
+from flask_security import Security, SQLAlchemyUserDatastore, login_required
 from flask_security.utils import hash_password
 from flask_security import current_user, auth_required, SQLAlchemySessionUserDatastore, permissions_accepted, roles_accepted, current_user
 
@@ -79,6 +79,18 @@ def materials_page(sub_cat_id):
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
+@app.route("/materials/<int:sub_cat_id>/delete", methods=['POST'])
+@login_required
+def delete_post(sub_cat_id):
+    post_id = request.form.get('post_id')
+    post_to_delete = Post.query.get(post_id)
+
+    if post_to_delete.user_id == current_user.user_id:
+        db.session.delete(post_to_delete)
+        db.session.commit()
+        return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
+    else:
+        return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
 
 @app.route("/material/<int:post_id>")
 def material_page(post_id):

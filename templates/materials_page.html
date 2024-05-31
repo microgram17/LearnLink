@@ -11,6 +11,13 @@
         <a class="material-box" href="{{ url_for('material_page', post_id=material.post_id) }}">
             <div class="material-sub-box">
             <h1>{{ material.post_title }}</h1>
+            {% if current_user.is_authenticated %}
+                <form class="delete_me_materials" method="POST" action="{{ url_for('delete_post', sub_cat_id=sub_category.sub_category_id) }}">
+                    <input type="hidden" name="post_id" value="{{ material.post_id }}">
+                    <button type="submit">Delete</button>
+                </form>
+
+                {% endif %}
             <p>{{ material.post_body}}</p>
             </div>
         </a>
