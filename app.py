@@ -44,6 +44,10 @@ def category_page_by_id(category_id):
     category = Category.query.get(category_id)
     return render_template("subcategory_page.html", category=category)
 
+@app.route("/about")
+def about():
+    return render_template("about_us.html")
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
