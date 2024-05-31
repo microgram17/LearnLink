@@ -48,6 +48,9 @@ def category_page_by_id(category_id):
 def about():
     return render_template("about_us.html")
 
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -88,14 +91,12 @@ def materials_page(sub_cat_id):
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
-
 @app.route("/material/<int:post_id>")
 def material_page(post_id):
     material = Post.query.get(post_id)
     return render_template("material_page.html", material=material)
 
 # Place holder för att titta på posts manuellet
-
 
 @app.route('/post/<int:post_id>')
 def view_post(post_id):
