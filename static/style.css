@@ -567,4 +567,20 @@ footer {
     font-size: 1.5rem;
     font-weight: bold;
 }
-  
+
+.post-title {
+    margin-bottom: 10px;
+}
+
+.post-author {
+    font-size: 1rem;
+    margin-bottom: 1em;
+}
+
+.post-username {
+    color: purple;
+}
+
+.post-text {
+    font-size: 1rem;
+}
