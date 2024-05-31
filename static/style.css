@@ -450,3 +450,24 @@ footer {
     margin-top: 65px;
     margin-left: -150px;
 }
+
+.faq {
+    list-style-type: 1;
+    margin: 10px;
+}
+
+.faq p{
+    font-size: 1.2em;
+    margin: 0.5em;
+    max-width: 70%;
+}
+
+.master-li {
+    font-size: 1.6em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+.slave-li {
+    margin-left: 2em;
+}
