@@ -13,6 +13,15 @@
     background-color:hsl(218deg 50% 91%);
 }
 
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+footer{
+    margin-top: auto;
+}
+
 h1 {
     font-size: 3em;
 }
@@ -42,7 +51,7 @@ nav {
     top: 0; /* Stay at the top */
     left: 0;
     padding-top: 5%;
-    background-color: var(--dark-blue);
+    background-color: #012F3F;
     height: 100%; /* Full-height: remove this if you want "auto" height */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
@@ -81,6 +90,11 @@ nav ul li ul li a {
 
 nav ul li ul li a:hover {
     border-left: 2px solid var(--text-color);
+}
+
+.logoanch {
+    all: initial;
+    cursor: pointer;
 }
 
 .username-highlight {
@@ -154,24 +168,37 @@ nav p {
     background-color: var(--light-blue);
     color: var(--text-color);
     text-decoration: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.box:hover {
+    transform: scale(1.05);
 }
 
 /* Material box styling */
 .material-box {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--light-blue);
     color: var(--black-color);
-    margin: 25px;
-    padding: 25px;
-    width: 90%;
+    margin: 15px;
+    width: 95%;
     text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.material-box:hover {
+    transform: scale(1.05);
 }
 
 .material-sub-box {
     position: relative;
     width: 100%; /* Ensure the box takes full width */
+    background-color: var(--light-blue);
+    padding: 15px;
+    border-radius: 15px;
 }
 
 .material-sub-box h1 {
@@ -179,6 +206,7 @@ nav p {
     padding-bottom: 5px; /* Optional: Adjust to add space between text and border */
     position: relative;
     z-index: 1;
+    font-size: 2em;
 }
 
 .material-sub-box h1::after {
@@ -190,6 +218,11 @@ nav p {
     height: 2px;
     background-color: var(--black-color);
     z-index: -1;
+}
+
+.post-date {
+    display: flex;
+    margin-left: 93%;
 }
 
 /* Post button styling */
@@ -262,7 +295,7 @@ footer {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -331,11 +364,6 @@ footer {
 .post-body-21 p:hover {
     color: #004d40;
     transition: color 0.3s ease;
-}
-
-.container {
-	height: 84.5vh;
-    
 }
 
 .title{
@@ -456,4 +484,76 @@ footer {
 
 .comment .form-group button {
     margin-top: 5px;
+}
+
+.takeme {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: var(--hover-blue);
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.takeme:hover {
+    background-color: var(--light-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.takeme:active {
+    background-color: var(--light-blue);
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.landing-text {
+    font-size: 1.4rem;
+}
+
+.about-us {
+    max-width: 60%;
+    font-size: 1.2rem;
+}
+
+.about-us h1 {
+    max-width: 60%;
+    font-size: 2rem;
+    margin: 10px;
+}
+
+.about-us ul {
+    margin-left: 30px;
+}
+
+.about-us img{
+    margin-top: 65px;
+    margin-left: -150px;
+}
+
+.faq {
+    list-style-type: 1;
+    margin: 10px;
+}
+
+.faq p{
+    font-size: 1.2em;
+    margin: 0.5em;
+    max-width: 70%;
+}
+
+.master-li {
+    font-size: 1.6em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+.slave-li {
+    margin-left: 2em;
 }

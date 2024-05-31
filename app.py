@@ -49,6 +49,11 @@ def sanitize_input(input_text):
 #     return response
 
 @app.route("/")
+def landing_page():
+    recent_posts = Post.query.order_by(Post.created_at.desc()).limit(3).all()
+    return render_template("landing_page.html", recent_posts=recent_posts)
+
+@app.route("/categories")
 def category_page():
     category = Category.query.all()
     return render_template("category_page.html", category=category)
@@ -58,6 +63,13 @@ def category_page_by_id(category_id):
     category = Category.query.get(category_id)
     return render_template("subcategory_page.html", category=category)
 
+@app.route("/about")
+def about():
+    return render_template("about_us.html")
+
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,7 +109,6 @@ def materials_page(sub_cat_id):
     materials = Post.query.filter_by(sub_cat_id=sub_cat_id).all()
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
-
 
 # Function to recursively fetch child comments for a given comment
 def fetch_child_comments(comment, depth=0):
@@ -191,12 +202,6 @@ def material_page(post_id):
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
     root_comments = build_comment_tree(comments)
     return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form)
-
-
-
-
-
-
 
 
 # Route for Post creation form

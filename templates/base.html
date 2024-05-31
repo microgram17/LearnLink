@@ -16,9 +16,12 @@
     <nav>
       {% if current_user.is_authenticated %}
       <ul>
-          <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
+          <li><a class="logoanch" href="/"><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li></a>
+          <li><a href="/categories">Subjects</a></li>
           <li><p>Logged in as: <span class="username-highlight">{{ current_user.user_name }}</span></p></li>
           <li><a href="/logout">logout</a></li>
+          <li class="sub-menu">
+            <a href="#message">Other</a>
           <li><a href="/">Subjects</a></li>
           <li>
             <div class="search_cat">
@@ -29,20 +32,22 @@
             </form>
             </div>
           </li>
-          <!-- TODO Hidden since they don't do anything yet -->
-          <!-- <li class="sub-menu">
+          <li class="sub-menu">
             <a href="#message">Help</a>
             <ul>
-              <li><a href="#settings">FAQ's</a></li>
-              <li><a href="">Contact</a></li>
+              <li><a href="/faq">FAQ's</a></li>
+              <li><a href="/about">About us</a></li>
             </ul>
-          </li> -->
+          </li>
         </ul>
         {% else %}
         <ul>
-          <li><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li>
+          <li><a class="logoanch" href="/"><img src="/static/learnlinklogo.svg" alt="Logo" class="logo"/></li></a>
+          <li><a href="/categories">Subjects</a></li>
           <li><a href="/login">login</a></li>
           <li><a href="/register">Register</a></li>
+          <li class="sub-menu">
+            <a href="#message">Other</a>
           <li><a href="/">Subjects</a></li>
           <li>
             <div class="search_cat">
@@ -53,14 +58,13 @@
             </form>
             </div>
           </li>
-          <!-- TODO Hidden since they don't do anything yet -->
-          <!-- <li class="sub-menu">
+          <li class="sub-menu">
             <a href="#message">Help</a>
             <ul>
-              <li><a href="#settings">FAQ's</a></li>
-              <li><a href="">Contact</a></li>
+              <li><a href="/faq">FAQ's</a></li>
+              <li><a href="/about">About us</a></li>
             </ul>
-          </li> -->
+          </li>
         </ul>
         {% endif %}
       </nav>
@@ -88,6 +92,7 @@
       <div class="footer-section">
         <h4>Quick Links</h4>
         <ul>
+          <li><a href="/categories">Subjects</a></li>
           <li><a href="/about">About Us</a></li>
           <li><a href="/faq">FAQ</a></li>
         </ul>

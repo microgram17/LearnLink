@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<section class="content">
+    <h1>Frequently asked questions</h1><br>
+    <section class="category-container faq">
+        <p>Welcome to LearnLink's FAQ page! Here you'll find answers to some of the most common questions about our platform. If you don't see your question here, feel free to contact us for further assistance.
+        </p>
+            <ol>
+                <li class="master-li">What is LearnLink?</li>
+                <p>LearnLink is an online platform that provides students with access to a wide variety of study resources, including links to video tutorials, interactive quizzes, and other educational content. Our goal is to make quality educational materials accessible to everyone.</p>
+                <li class="master-li">How do I create an account?</li>
+                <p>Creating an account is easy! Just follow these steps:</p>
+                <ol>
+                    <li class="slave-li">Click on the "Register" button on the homepage or sidebar.</li>
+                    <li class="slave-li">Fill in your name, email address, and create a password.</li>
+                    <li class="slave-li">Log in and start exploring!</li>
+                </ol>
+                <li class="master-li">Is LearnLink free to use?</li>
+                <p>Yes, LearnLink is completely free to use. We believe in making education accessible to all, so our platform is open to everyone without any subscription fees.</p>
+                <li class="master-li">How can I find study resources?</li>
+                <ol>
+                    <li class="slave-li">Browsing through categories on the homepage.</li>
+                    <li class="slave-li">Using the search bar to look for specific topics or materials.</li>
+                    <li class="slave-li">Exploring subcategories for more specific subjects.</li>
+                </ol>
+                <li class="master-li">Can I upload my own study materials?</li>
+                <ol>
+                    <li class="slave-li">Log in to your account.</li>
+                    <li class="slave-li">Navigate to the correct subcategory and press "Create post" at the top right.</li>
+                    <li class="slave-li">Fill in the necessary details and attach your materials.</li>
+                    <li class="slave-li">Submit and help others learn!</li>
+                </ol>
+            </ol>
+    </section>
+</section>
+{% endblock %}
