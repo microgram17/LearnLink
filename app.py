@@ -85,7 +85,7 @@ def delete_post(sub_cat_id):
     post_id = request.form.get('post_id')
     post_to_delete = Post.query.get(post_id)
 
-    if post_to_delete.user_id == current_user.user_id:
+    if (post_to_delete.user_id == current_user.user_id) or ('Admin' in [role.name for role in current_user.roles]):
         db.session.delete(post_to_delete)
         db.session.commit()
         return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
