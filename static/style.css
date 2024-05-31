@@ -557,3 +557,14 @@ footer {
 .slave-li {
     margin-left: 2em;
 }
+
+.login-error {
+    color: red;
+    font-size: 1.5rem;
+}
+
+.custom-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+  
