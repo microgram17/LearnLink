@@ -371,3 +371,26 @@ footer {
 .fs-gap {
 
 }
+
+.delete_me_materials {
+    display: inline-block;
+    padding: 0.15vh 0.5vw;
+    border: 0;
+    background-color: #eb4a4a;
+    font-size: 1vw;
+    cursor: pointer;
+    border-radius: 2vw;
+}
+
+.delete_post {
+    font-family: "Sanchez", serif;
+    font-weight: 400;
+    font-style: italic;
+    background-color: #eb4a4a;
+    color: #f3ebeb;
+    padding: 1vh 1.5vw;
+    border: none;
+    border-radius: 2vw;
+    cursor: pointer;
+    font-size: large;
+}
