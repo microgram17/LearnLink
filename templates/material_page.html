@@ -20,37 +20,35 @@
 
     <section class="comments-section">
         <h2>Comments</h2>
-        <form method="POST">
-            {{ comment_form.hidden_tag() }}
-            <div class="form-group">
-                {{ comment_form.comment_text.label }}
-                {{ comment_form.comment_text(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ comment_form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
+        {% if current_user.is_authenticated %}
+            <form method="POST">
+                {{ comment_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ comment_form.comment_text.label }}
+                    {{ comment_form.comment_text(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ comment_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        {% else %}
+            <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to comment.</p>
+        {% endif %}
 
-        <ul class="comments">
+        <div class="comments">
             {% for comment in comments %}
                 {% with comment=comment %}
                     {% include 'comment.html' %}
                 {% endwith %}
             {% endfor %}
-        </ul>
+        </div>
     </section>
 </section>
 
 <script>
     function showReplyForm(commentId) {
-        // Hide all active reply forms
-        document.querySelectorAll('.reply-form.active').forEach(function(form) {
-            form.classList.remove('active');
-        });
-
-        // Show the selected reply form
         var replyForm = document.getElementById('reply-form-' + commentId);
-        replyForm.classList.add('active');
+        replyForm.style.display = 'block';
     }
 </script>
 {% endblock %}
