@@ -11,6 +11,8 @@ from flask_security.utils import hash_password
 from flask_security import current_user, auth_required, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore
 from sqlalchemy.orm import joinedload
 import bleach
+from flask_wtf import CSRFProtect
+
 
 app = Flask(__name__)
 
@@ -18,7 +20,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///learnlink.db"
 app.config['SECRET_KEY'] = '9d8^7F&4s2@Lp#N6'
 app.config['SECURITY_PASSWORD_SALT'] = 'super-secret-salt'
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.html'
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 
+csrf = CSRFProtect(app)
 db.init_app(app)
 migrate = Migrate(app, db)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -34,6 +42,10 @@ def sanitize_input(input_text):
 @app.after_request
 def apply_csp(response):
     response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self';"
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'no-referrer'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     return response
 
 @app.route("/")
