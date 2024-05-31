@@ -8,6 +8,7 @@ class Config:
     SECURITY_MSG_INVALID_PASSWORD = ("Bad username or password", "error")
     SECURITY_MSG_PASSWORD_NOT_PROVIDED = ("Bad username or password", "error")
     SECURITY_MSG_USER_DOES_NOT_EXIST = ("Bad username or password", "error")
+    SECURITY_MSG_INVALID_EMAIL_ADDRESS = ("Bad username or password", "error")
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
