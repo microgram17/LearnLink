@@ -6,8 +6,9 @@
 <section class="content">
     <section class="content-21">
         <div class="post-content-21">
-            <h1>{{ material.post_title }}</h1>
-            <p>{{ material.post_body | make_links | safe }}</p>
+            <h1 class="post-title">{{ material.post_title }}</h1>
+            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span> </p>
+            <p class="post-body">{{ material.post_body | make_links | safe }}</p>
             {% for attachment in material.files_attached %}
                 {% if attachment.file_type == 'video' %}
                     <div>
