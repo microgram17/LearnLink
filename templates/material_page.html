@@ -9,6 +9,16 @@
             <h1 class="post-title">{{ material.post_title }}</h1>
             <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span></p>
             <p class="post-body">{{ material.post_body | make_links | safe }}</p>
+            
+            
+            <span class="post-edited"> (Created {{ material.created_at.strftime('%Y-%m-%d %H:%M:%S') }})</span>
+            <!-- Att man ser det är ändrat -->
+            {% if material.created_at != material.updated_at %}
+                <p></p>
+                <i><span class="post-edited"> (Edited {{ material.updated_at.strftime('%Y-%m-%d %H:%M:%S') }})</span></i>
+            {% endif %}
+                  
+            <!-- Edit post funktionen -->
             {% if current_user.is_authenticated and material.user_id == current_user_id %}
                 <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="btn btn-warning">Edit Post</a>
             {% endif %}
