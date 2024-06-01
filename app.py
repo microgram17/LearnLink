@@ -266,26 +266,25 @@ def create_post(sub_cat_id):
 @app.route('/edit_post/<post_id>', methods=['GET', 'POST'])
 @auth_required()
 def edit_post(post_id):
-    post = Post.query.get_or_404(post_id)  # Retrieve the post from the database
+    post = Post.query.get_or_404(post_id)  
 
-    # Check if the current user is the owner of the post
+    # Kolla vilken användare
     if post.user_id != current_user.user_id:
-        abort(403)  # Return Forbidden error if the user doesn't own the post
+        abort(403)  # Om användare inte äger detta, kicka han
 
     if request.method == 'GET':
-        form = PostForm(obj=post)  # Populate the form with post data
+        form = PostForm(obj=post)  
         return render_template('edit_post.html', post=post, form=form)
 
     if request.method == 'POST':
         form = PostForm(request.form)
 
         if form.validate_on_submit():
-            # Update the post attributes with the form data
+            # Updatera
             post.post_title = sanitize_input(form.post_title.data)
             post.post_body = sanitize_input(form.post_body.data)
             post.updated_at = datetime.now()
 
-            # Handle video URL parsing and updating file attachments (similar to create post route)
             video_urls = re.findall(
                 r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))', form.post_body.data)
             for match in video_urls:
@@ -303,7 +302,7 @@ def edit_post(post_id):
             db.session.commit()
 
             flash('Post updated successfully!', 'success')
-            return redirect(url_for('material_page', post_id=post.post_id))  # Redirect to post view page
+            return redirect(url_for('material_page', post_id=post.post_id))  
 
         return render_template('edit_post.html', post=post, form=form)
 
