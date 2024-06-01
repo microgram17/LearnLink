@@ -13,12 +13,11 @@
             <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
                 {{ comment_form.hidden_tag() }}
                 <div class="form-group">
-                    {{ comment_form.comment_text.label }}
-                    {{ comment_form.comment_text(class="form-control") }}
+                    {{ comment_form.comment_text(placeholder="Your reply", class="form-control") }}
                 </div>
                 <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
                 <div class="form-group">
-                    {{ comment_form.submit(class="btn btn-primary") }}
+                    {{ comment_form.submit }}
                 </div>
             </form>
         </div>
