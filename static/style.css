@@ -415,6 +415,15 @@ footer {
     cursor: pointer;
 }
 
+.form-control {
+    width: 100%;
+    min-height: 130px;
+    padding: 10px;
+    font-size: 1.3rem;
+    box-sizing: border-box;
+    resize: none;
+}
+
 .comments-section .btn:hover {
     background-color: #0056b3;
 }
