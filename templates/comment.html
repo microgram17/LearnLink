@@ -1,0 +1,37 @@
+<li class="comment">
+    <p><strong>{{ comment.user.user_name }}:</strong> {{ comment.comment_text }}</p>
+    <div class="comment-meta">
+        {% if comment.created_at %}
+            <p>Created at: {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        {% else %}
+            No creation date available
+        {% endif %}
+    </div>
+    {% if current_user.is_authenticated %}
+        <button onclick="showReplyForm({{ comment.comment_id }})">Reply</button>
+        <div id="reply-form-{{ comment.comment_id }}" class="reply-form" style="display: none;">
+            <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+                {{ comment_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ comment_form.comment_text(placeholder="Your reply", class="form-control") }}
+                </div>
+                <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                <div class="form-group">
+                    {{ comment_form.submit }}
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to reply.</p>
+    {% endif %}
+
+    {% if comment.child_comments %}
+        <ul class="child-comments">
+            {% for child_comment in comment.child_comments %}
+                {% with comment=child_comment %}
+                    {% include 'comment.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

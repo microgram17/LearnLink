@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %} Register User {% endblock %} {%
+    block content %} {% with messages = get_flashed_messages() %} {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %} {% endif %} {% endwith %}
+    
+    <div class="content">
+      <div class="container">
+      <h2 class="title">Register New User</h2>
+      <form method="POST" action="{{ url_for('register')}}" class="input-field">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Name"
+          class="name"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          class="email"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <input type="submit" class="submit" />
+      </form>
+      </div>
+    </div>
+    {% endblock %}
