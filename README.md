@@ -1,5 +1,11 @@
 # LearnLink
-Platform for finding study resources online.
+Platform for finding study resources online: 
+https://learnlink.pythonanywhere.com/
+
+EU server backup:
+https://megane.eu.pythonanywhere.com/
+
+Backup link:
 https://microgram.pythonanywhere.com/
 
 
