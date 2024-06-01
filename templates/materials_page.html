@@ -19,6 +19,7 @@
 
                 {% endif %}
             <p>{{ material.post_body}}</p>
+            <div class="post-date"><p><em>Posted at: {{ material.created_at.strftime('%H:%M:%S') }}</em></p></div>
             </div>
         </a>
         {% endfor %}

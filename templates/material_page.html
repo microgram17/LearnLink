@@ -6,8 +6,9 @@
 <section class="content">
     <section class="content-21">
         <div class="post-content-21">
-            <h1>{{ material.post_title }}</h1>
-            <p>{{ material.post_body | make_links | safe }}</p>
+            <h1 class="post-title">{{ material.post_title }}</h1>
+            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span> </p>
+            <p class="post-body">{{ material.post_body | make_links | safe }}</p>
             {% for attachment in material.files_attached %}
                 {% if attachment.file_type == 'video' %}
                     <div>
@@ -17,5 +18,38 @@
             {% endfor %}
         </div>
     </section>
+
+    <section class="comments-section">
+        <h2>Comments</h2>
+        {% if current_user.is_authenticated %}
+            <form method="POST">
+                {{ comment_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ comment_form.comment_text.label }}
+                    {{ comment_form.comment_text(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ comment_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        {% else %}
+            <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to comment.</p>
+        {% endif %}
+
+        <div class="comments">
+            {% for comment in comments %}
+                {% with comment=comment %}
+                    {% include 'comment.html' %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </section>
 </section>
+
+<script>
+    function showReplyForm(commentId) {
+        var replyForm = document.getElementById('reply-form-' + commentId);
+        replyForm.style.display = 'block';
+    }
+</script>
 {% endblock %}

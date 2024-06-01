@@ -1,21 +1,47 @@
 {% extends "base.html" %}
-{% from "security/_macros.html" import render_field_with_errors, render_field, render_field_errors, render_form_errors, prop_next %}
+{% from "security/_macros.html" import render_field, render_form_errors, prop_next %}
 
 {% block content %}
   {% include "security/_messages.html" %}
   <h1>{{ _fsdomain('Login') }}</h1>
   <form class="content" action="{{ url_for_security('login') }}{{ prop_next() }}" method="post" name="login_user_form">
     {{ login_user_form.hidden_tag() }}
-    {{ render_form_errors(login_user_form) }}
-    {% if "email" in identity_attributes %}{{ render_field_with_errors(login_user_form.email) }}{% endif %}
-    {% if login_user_form.username and "username" in identity_attributes %}
-      {% if "email" in identity_attributes %}<h3>{{ _fsdomain("or") }}</h3>{% endif %}
-      {{ render_field_with_errors(login_user_form.username) }}
+
+    <!-- Render form errors here in a single place -->
+    {% if login_user_form.errors %}
+      <div class="fs-error-msg">
+        {% for field_errors in login_user_form.errors.values() %}
+          {% for error in field_errors %}
+            <p class="login-error">{{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+      </div>
     {% endif %}
-    <div class="fs-gap">{{ render_field_with_errors(login_user_form.password) }}</div>
-    {{ render_field_with_errors(login_user_form.remember) }}
-    {{ render_field_errors(login_user_form.csrf_token) }}
-    {{ render_field(login_user_form.submit) }}
+    
+    {% if "email" in identity_attributes %}
+      <div class="form-group">
+        <label for="email" class="custom-label">{{ _fsdomain('Email:') }}</label>
+        {{ render_field(login_user_form.email, class_="form-control") }}
+      </div>
+    {% endif %}
+    {% if login_user_form.username and "username" in identity_attributes %}
+      {% if "email" in identity_attributes %}
+        <h3>{{ _fsdomain("or") }}</h3>
+      {% endif %}
+      <div class="form-group">
+        <label for="username" class="custom-label">{{ _fsdomain('Username:') }}</label>
+        {{ render_field(login_user_form.username, class_="form-control") }}
+      </div>
+    {% endif %}
+    <div class="form-group fs-gap">
+      <label for="password" class="custom-label">{{ _fsdomain('Password:') }}</label>
+      {{ render_field(login_user_form.password, class_="form-control") }}
+    </div>
+    <!-- <div class="form-check">
+      {{ render_field(login_user_form.remember, class_="form-check-input") }}
+      <label class="form-check-label custom-label" for="remember">{{ _fsdomain('Remember me for future visits') }}</label>
+    </div> -->
+    {{ render_field(login_user_form.submit, class_="btn btn-primary") }}
   </form>
   {% if security.webauthn %}
     <hr class="fs-gap">
