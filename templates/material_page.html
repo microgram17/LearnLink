@@ -7,8 +7,11 @@
     <section class="content-21">
         <div class="post-content-21">
             <h1 class="post-title">{{ material.post_title }}</h1>
-            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span> </p>
+            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span></p>
             <p class="post-body">{{ material.post_body | make_links | safe }}</p>
+            {% if current_user.is_authenticated and material.user_id == current_user_id %}
+                <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="btn btn-warning">Edit Post</a>
+            {% endif %}
             {% for attachment in material.files_attached %}
                 {% if attachment.file_type == 'video' %}
                     <div>
