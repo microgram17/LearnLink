@@ -9,5 +9,5 @@ class PostForm(FlaskForm):
     submit = SubmitField('Create Post')
 
 class CommentForm(FlaskForm):
-    comment_text = TextAreaField('Comment', validators=[DataRequired(), Length(max=255)])
-    submit = SubmitField('Post Comment')
+    comment_text = TextAreaField('', validators=[DataRequired()], render_kw={"class": "form-control"})
+    submit = SubmitField('Submit', render_kw={"class": "btn btn-primary"})

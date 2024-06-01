@@ -22,11 +22,10 @@
     <section class="comments-section">
         <h2>Comments</h2>
         {% if current_user.is_authenticated %}
-            <form method="POST">
+            <form method="POST" action="{{ url_for('material_page', post_id=material.post_id) }}">
                 {{ comment_form.hidden_tag() }}
                 <div class="form-group">
-                    {{ comment_form.comment_text.label }}
-                    {{ comment_form.comment_text(class="form-control") }}
+                    {{ comment_form.comment_text(placeholder="Your comment", class="form-control") }}
                 </div>
                 <div class="form-group">
                     {{ comment_form.submit(class="btn btn-primary") }}
