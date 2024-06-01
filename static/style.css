@@ -421,7 +421,6 @@ footer {
     padding: 10px;
     font-size: 1.3rem;
     box-sizing: border-box;
-    resize: none;
 }
 
 .comments-section .btn:hover {
