@@ -7,20 +7,24 @@
             No creation date available
         {% endif %}
     </div>
-    <button onclick="showReplyForm({{ comment.comment_id }})">Reply</button>
-    <div id="reply-form-{{ comment.comment_id }}" class="reply-form">
-        <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
-            {{ comment_form.hidden_tag() }}
-            <div class="form-group">
-                {{ comment_form.comment_text.label }}
-                {{ comment_form.comment_text(class="form-control") }}
-            </div>
-            <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
-            <div class="form-group">
-                {{ comment_form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
-    </div>
+    {% if current_user.is_authenticated %}
+        <button onclick="showReplyForm({{ comment.comment_id }})">Reply</button>
+        <div id="reply-form-{{ comment.comment_id }}" class="reply-form" style="display: none;">
+            <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+                {{ comment_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ comment_form.comment_text.label }}
+                    {{ comment_form.comment_text(class="form-control") }}
+                </div>
+                <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                <div class="form-group">
+                    {{ comment_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to reply.</p>
+    {% endif %}
 
     {% if comment.child_comments %}
         <ul class="child-comments">
