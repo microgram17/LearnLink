@@ -8,7 +8,7 @@ from datetime import datetime
 import re
 from markupsafe import Markup
 from flask_security.utils import hash_password
-from flask_security import current_user, auth_required, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore
+from flask_security import current_user, auth_required, permissions_accepted, roles_accepted, current_user, Security, SQLAlchemyUserDatastore, login_required
 from sqlalchemy.orm import joinedload
 import bleach
 from flask_wtf import CSRFProtect
@@ -102,6 +102,20 @@ def materials_page(sub_cat_id):
     materials = Post.query.filter_by(sub_cat_id=sub_cat_id).all()
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
+
+
+@app.route("/materials/<int:sub_cat_id>/delete", methods=['POST'])
+@login_required
+def delete_post(sub_cat_id):
+    post_id = request.form.get('post_id')
+    post_to_delete = Post.query.get(post_id)
+
+    if (post_to_delete.user_id == current_user.user_id) or ('Admin' in [role.name for role in current_user.roles]):
+        db.session.delete(post_to_delete)
+        db.session.commit()
+        return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
+    else:
+        return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
 
 # Function to recursively fetch child comments for a given comment
 def fetch_child_comments(comment, depth=0):
