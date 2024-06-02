@@ -20,7 +20,7 @@
                   
             <!-- Edit post funktionen -->
             {% if current_user.is_authenticated and material.user_id == current_user_id %}
-                <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="btn btn-warning">Edit Post</a>
+                <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="edit-button">Edit Post</a>
             {% endif %}
             {% for attachment in material.files_attached %}
                 {% if attachment.file_type == 'video' %}
