@@ -413,7 +413,7 @@ def user_seed_data():
             "email": "tomato@farmer.com",
             "password": "tomato",
             "roles": ["User"],
-        },
+        }
     ]
 
     try:
