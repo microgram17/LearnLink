@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, abort
 from models import *
 from flask_migrate import Migrate, upgrade
 import os
@@ -200,7 +200,7 @@ def material_page(post_id):
                 parent_comment_id=request.form.get('parent_comment_id', type=int),
                 created_at=datetime.now(),
                 updated_at=datetime.now()
-            )
+            ) 
             db.session.add(new_comment)
             db.session.commit()
             flash('Comment posted successfully!', 'success')
@@ -208,7 +208,9 @@ def material_page(post_id):
 
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
     root_comments = build_comment_tree(comments)
-    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form)
+    current_user_id = current_user.user_id if current_user.is_authenticated else None
+    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user_id)
+
 
 
 # Route for Post creation form
@@ -260,6 +262,50 @@ def create_post(sub_cat_id):
             return redirect(url_for('materials_page', sub_cat_id=sub_cat_id))
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
+
+# Route for editing a post
+@app.route('/edit_post/<post_id>', methods=['GET', 'POST'])
+@auth_required()
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)  
+
+    # Kolla vilken användare
+    if post.user_id != current_user.user_id:
+        abort(403)  # Om användare inte äger detta, kicka han
+
+    if request.method == 'GET':
+        form = PostForm(obj=post)  
+        return render_template('edit_post.html', post=post, form=form)
+
+    if request.method == 'POST':
+        form = PostForm(request.form)
+
+        if form.validate_on_submit():
+            # Updatera
+            post.post_title = sanitize_input(form.post_title.data)
+            post.post_body = sanitize_input(form.post_body.data)
+            post.updated_at = datetime.now()
+
+            video_urls = re.findall(
+                r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))', form.post_body.data)
+            for match in video_urls:
+                youtube_id = match[1] if match[1] else match[2]
+                if youtube_id:
+                    youtube_embed_url = f"https://www.youtube.com/embed/{youtube_id}"
+                    new_video = FileAttachment(
+                        post_id=post.post_id,
+                        file_name='Video',
+                        file_url=youtube_embed_url,
+                        file_type='video'
+                    )
+                    db.session.add(new_video)
+
+            db.session.commit()
+
+            flash('Post updated successfully!', 'success')
+            return redirect(url_for('material_page', post_id=post.post_id))  
+
+        return render_template('edit_post.html', post=post, form=form)
 
 @app.route("/search", methods=["POST", "GET"])
 def search():
@@ -367,7 +413,7 @@ def user_seed_data():
             "email": "tomato@farmer.com",
             "password": "tomato",
             "roles": ["User"],
-        }
+        },
     ]
 
     try:

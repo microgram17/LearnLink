@@ -11,7 +11,9 @@
         <a class="material-box" href="{{ url_for('material_page', post_id=material.post_id) }}">
             <div class="material-sub-box">
             <h1>{{ material.post_title }}</h1>
-            {% if current_user.is_authenticated %}
+            
+            <!-- Ändrat till att delete knappen endast syns för admin och skaparen -->
+            {% if current_user.is_authenticated and (material.user_id == current_user.user_id or current_user.has_role('Admin')) %}
                 <form class="delete_me_materials" method="POST" action="{{ url_for('delete_post', sub_cat_id=sub_category.sub_category_id) }}">
                     <input type="hidden" name="post_id" value="{{ material.post_id }}">
                     <button class="delete_post" type="submit">Delete Post</button>
