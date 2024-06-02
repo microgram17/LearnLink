@@ -31,12 +31,10 @@ class User(db.Model, UserMixin):
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())
     created_at = Column(DateTime())
-    fs_uniquifier = Column(String(255), unique=True,
-                           nullable=False, default=lambda: str(uuid.uuid4()))
+    fs_uniquifier = Column(String(255), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     active = Column(Boolean, default=True)
 
-    roles = relationship('Role', secondary=roles_users,
-                         backref=backref('users', lazy='dynamic'))
+    roles = relationship('Role', secondary=roles_users, backref=backref('users', lazy='dynamic'))
     created_posts = relationship('Post', back_populates='user')
     created_comments = relationship('Comments', back_populates='user')
     post_ratings = relationship('PostRating', back_populates='user')
@@ -75,10 +73,9 @@ class Post(db.Model):
     user = relationship('User', back_populates='created_posts')
     sub_category = relationship('SubCategory', back_populates='related_posts')
     related_comments = relationship('Comments', back_populates='related_post')
-    post_rating = relationship(
-        'PostRating', back_populates='rated_post', uselist=False)
-    files_attached = relationship(
-        'FileAttachment', back_populates='attached_post')
+    post_ratings = relationship('PostRating', back_populates='rated_post')  # Changed to plural
+    files_attached = relationship('FileAttachment', back_populates='attached_post')
+
 
 
 class Comments(db.Model):
@@ -119,11 +116,9 @@ class PostRating(db.Model):
     post_rating_id = Column(Integer, primary_key=True)
     post_id = Column(Integer, ForeignKey('posts.post_id'))
     user_id = Column(Integer, ForeignKey('users.user_id'))
-    like = Column(Boolean)
-    dislike = Column(Boolean)
+    rating = Column(Boolean)  # True for thumbs up, False for thumbs down
 
-    rated_post = relationship(
-        'Post', back_populates='post_rating', uselist=False)
+    rated_post = relationship('Post', back_populates='post_ratings')
     user = relationship('User', back_populates='post_ratings')
 
     __table_args__ = (UniqueConstraint('post_id', 'user_id'),)
