@@ -222,7 +222,7 @@ nav p {
 
 .post-date {
     display: flex;
-    margin-left: 93%;
+    float: right;
 }
 
 /* Post button styling */
@@ -316,14 +316,17 @@ footer {
 
 /* Container */
 .content-21 {
-    max-width: 600px;
+    max-width: 80%;
     margin: 0 auto;
+    margin-right: 12%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 15px;
     background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    overflow-wrap: break-word;
+    margin-bottom: 2em;
 }
 
 .content-21:hover {
@@ -366,6 +369,11 @@ footer {
     transition: color 0.3s ease;
 }
 
+.post-body {
+    margin-bottom: 1em;
+    font-size: 1.2em;
+}
+
 .title{
     font-size: 78px;
 }
@@ -398,7 +406,9 @@ footer {
 
 /*  Comment section styling */
 .comments-section {
-    margin-left: auto;
+    width: 80%;
+    margin: 0 auto;
+    margin-right: 12%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 15px;
@@ -583,6 +593,7 @@ footer {
 .post-author {
     font-size: 1rem;
     margin-bottom: 1em;
+    float: right;
 }
 
 .post-username {
@@ -593,14 +604,19 @@ footer {
     font-size: 1rem;
 }
 
+.post-edited {
+    float: right;
+}
+
 .delete_me_materials {
-    display: inline-block;
+    display: inline;
     padding: 0.15vh 0.5vw;
     border: 0;
     background-color: #eb4a4a;
     font-size: 1vw;
     cursor: pointer;
     border-radius: 2vw;
+    float: right;
 }
 
 .delete_post {

@@ -20,7 +20,7 @@
                 <div class="material-sub-box">
                     <h1>{{ post.post_title }}</h1>
                     <p>{{ post.post_body }}</p>
-                    <div class="post-date"><p><em>Posted in: {{ post.sub_category.sub_category_name }} Time: {{ post.created_at.strftime('%H:%M:%S') }}</em></p><br></div>
+                    <div class="post-date"><p><em>Posted in: {{ post.sub_category.sub_category_name }}<br> Date: {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em></p><br></div>
                 </div>
         </a>
         {% endfor %}
