@@ -208,7 +208,8 @@ def material_page(post_id):
 
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
     root_comments = build_comment_tree(comments)
-    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user.user_id)
+    current_user_id = current_user.user_id if current_user.is_authenticated else None
+    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user_id)
 
 
 
@@ -412,7 +413,7 @@ def user_seed_data():
             "email": "tomato@farmer.com",
             "password": "tomato",
             "roles": ["User"],
-        }
+        },
     ]
 
     try:
