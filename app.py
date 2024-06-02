@@ -263,18 +263,17 @@ def create_post(sub_cat_id):
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
 
-# Route for editing a post
 @app.route('/edit_post/<post_id>', methods=['GET', 'POST'])
 @auth_required()
 def edit_post(post_id):
-    post = Post.query.get_or_404(post_id)  
+    post = Post.query.get_or_404(post_id)
 
     # Kolla vilken användare
     if post.user_id != current_user.user_id:
         abort(403)  # Om användare inte äger detta, kicka han
 
     if request.method == 'GET':
-        form = PostForm(obj=post)  
+        form = PostForm(obj=post)
         return render_template('edit_post.html', post=post, form=form)
 
     if request.method == 'POST':
@@ -286,11 +285,26 @@ def edit_post(post_id):
             post.post_body = sanitize_input(form.post_body.data)
             post.updated_at = datetime.now()
 
+            # Extract current video URLs from the updated post body
             video_urls = re.findall(
-                r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))', form.post_body.data)
-            for match in video_urls:
-                youtube_id = match[1] if match[1] else match[2]
-                if youtube_id:
+                r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))',
+                form.post_body.data
+            )
+            current_video_ids = {match[1] if match[1] else match[2] for match in video_urls}
+
+            # Find existing video attachments
+            existing_attachments = FileAttachment.query.filter_by(post_id=post.post_id, file_type='video').all()
+            existing_video_ids = {attachment.file_url.split('/')[-1] for attachment in existing_attachments}
+
+            # Delete video attachments that are no longer in the post body
+            for attachment in existing_attachments:
+                youtube_id = attachment.file_url.split('/')[-1]
+                if youtube_id not in current_video_ids:
+                    db.session.delete(attachment)
+
+            # Add new video URLs that are not already in the database
+            for youtube_id in current_video_ids:
+                if youtube_id not in existing_video_ids:
                     youtube_embed_url = f"https://www.youtube.com/embed/{youtube_id}"
                     new_video = FileAttachment(
                         post_id=post.post_id,
@@ -303,7 +317,7 @@ def edit_post(post_id):
             db.session.commit()
 
             flash('Post updated successfully!', 'success')
-            return redirect(url_for('material_page', post_id=post.post_id))  
+            return redirect(url_for('material_page', post_id=post.post_id))
 
         return render_template('edit_post.html', post=post, form=form)
 
