@@ -13,7 +13,7 @@
     <a class="material-box" href ="/material/{{ id }}">
         <div class="material-sub-box">
         <h1>{{ post.post_title }}</h1>
-        {% if current_user.is_authenticated %}
+        {% if current_user.is_authenticated and (post.user_id == current_user.user_id or current_user.has_role('Admin')) %}
         <form class="delete_me_materials" method="POST" action="{{ url_for('delete_post', sub_cat_id=post.sub_cat_id) }}">
             <input type="hidden" name="post_id" value="{{ post.post_id }}">
             <button class="delete_post" type="submit">Delete Post</button>
