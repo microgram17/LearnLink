@@ -654,3 +654,40 @@ footer {
     outline: none;
     box-shadow: 0 0 0 4px rgba(235, 74, 74, 0.5); /* Focus ring for accessibility */
 }
+
+/* Edit button styling */
+.edit-button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff; /* Text color */
+    background-color: #007bff; /* Primary blue color */
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover state */
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow effect on hover */
+}
+
+/* Active state */
+.edit-button:active {
+    background-color: #004085; /* Even darker blue for active effect */
+    transform: scale(0.95); /* Slightly shrink the button on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Reduced shadow effect on click */
+}
+
+/* Focus state for accessibility */
+.edit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Focus ring for accessibility */
+}
