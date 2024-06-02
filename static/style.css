@@ -597,7 +597,9 @@ footer {
 }
 
 .post-username {
-    color: purple;
+    color: #007bff; /* Bootstrap primary blue color */
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .post-text {
