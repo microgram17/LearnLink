@@ -12,17 +12,17 @@
     <section class="category-container">
     <a class="material-box" href ="/material/{{ id }}">
         <div class="material-sub-box">
+            {% if current_user.is_authenticated and (post.user_id == current_user.user_id or current_user.has_role('Admin')) %}
+            <form class="delete_me_materials" method="POST" action="{{ url_for('delete_post', sub_cat_id=post.sub_cat_id) }}">
+                <input type="hidden" name="post_id" value="{{ post.post_id }}">
+                <button class="delete_post" type="submit">Delete Post</button>
+            </form>
         <h1>{{ post.post_title }}</h1>
-        {% if current_user.is_authenticated and (post.user_id == current_user.user_id or current_user.has_role('Admin')) %}
-        <form class="delete_me_materials" method="POST" action="{{ url_for('delete_post', sub_cat_id=post.sub_cat_id) }}">
-            <input type="hidden" name="post_id" value="{{ post.post_id }}">
-            <button class="delete_post" type="submit">Delete Post</button>
-        </form>
 
         {% endif %}
     <p>{{ post.post_body}}</p>
 
-    <div class="post-date"><p><em>Posted at: {{ post.created_at.strftime('%H:%M:%S') }}</em></p></div>
+    <div class="post-date"><p><em>Posted in: {{ post.sub_category.sub_category_name }}<br> Posted at: {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em></p></div>
 </div>
     </a>
 </section>
