@@ -152,6 +152,8 @@ def build_comment_tree(comments):
     comment_dict = {comment.comment_id: comment for comment in comments}
     for comment in comments:
         comment.child_comments = []
+        if comment.deleted:
+            comment.comment_text = "This comment has been deleted."
     root_comments = []
 
     for comment in comments:
@@ -223,7 +225,7 @@ def material_page(post_id):
         
         return render_template('comment.html', comment=comment, comment_form=comment_form, current_user_id=current_user_id)
 
-    return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user_id)
+    return render_template('material_page.html', material=material, comment_form=comment_form, root_comments=root_comments, current_user_id=current_user_id)
 
 
 
@@ -472,6 +474,18 @@ def make_links(text):
     # Function to replace URLs with anchor tags
     return Markup(re.sub(url_regex, replace, text))
 
+
+@app.route("/delete_comment/<int:comment_id>", methods=['POST'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+    if comment.user_id != current_user.user_id:
+        abort(403)
+
+    comment.deleted = True
+    db.session.commit()
+    flash('Comment deleted successfully!', 'success')
+    return redirect(url_for('material_page', post_id=comment.post_id))
 
 app.jinja_env.filters['make_links'] = make_links
 
