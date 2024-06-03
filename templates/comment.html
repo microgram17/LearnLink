@@ -1,47 +1,54 @@
-<li class="comment" id="comment-{{ comment.comment_id }}">
-    <p><strong>{{ comment.user.user_name }}:</strong> <span class="comment-text">{{ comment.comment_text }}</span></p>
-    <div class="comment-meta">
-        {% if comment.created_at %}
-            <p>Created at: {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+{% if not comment.deleted or (comment.deleted and comment.child_comments) %}
+    <li class="comment {% if comment.deleted %}deleted-comment{% endif %}" id="comment-{{ comment.comment_id }}">
+        {% if comment.deleted %}
+            <p style="color: #888; font-style: italic;">This comment has been deleted.</p>
         {% else %}
-            No creation date available
-        {% endif %}
-        {% if comment.updated_at %}
-            <p>Edited at: {{ comment.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        {% endif %}
-    </div>
-    {% if current_user.is_authenticated %}
-        <button onclick="showReplyForm({{ comment.comment_id }})">Reply</button>
-        <div id="reply-form-{{ comment.comment_id }}" class="reply-form" style="display: none;">
-            <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
-                {{ comment_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ comment_form.comment_text(placeholder="Your reply", class="form-control") }}
+            <p><strong>{{ comment.user.user_name }}:</strong> <span class="comment-text">{{ comment.comment_text }}</span></p>
+            <div class="comment-meta">
+                {% if comment.created_at %}
+                    <p>Created at: {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                {% else %}
+                    No creation date available
+                {% endif %}
+                {% if comment.updated_at %}
+                    <p>Edited at: {{ comment.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                {% endif %}
+            </div>
+            {% if current_user.is_authenticated %}
+                <button onclick="showReplyForm({{ comment.comment_id }})">Reply</button>
+                <div id="reply-form-{{ comment.comment_id }}" class="reply-form" style="display: none;">
+                    <form method="POST" action="{{ url_for('material_page', post_id=comment.post_id) }}">
+                        {{ comment_form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ comment_form.comment_text(placeholder="Your reply", class="form-control") }}
+                        </div>
+                        <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
+                        <div class="form-group">
+                            {{ comment_form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
                 </div>
-                <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
-                <div class="form-group">
-                    {{ comment_form.submit(class="btn btn-primary") }}
-                </div>
-            </form>
-        </div>
-        {% if comment.user_id == current_user_id %}
-            <button onclick="showEditForm({{ comment.comment_id }})">Edit</button>
-            <form id="edit-form-{{ comment.comment_id }}" style="display: none;" onsubmit="return editComment({{ comment.comment_id }})">
-                <textarea class="edit-comment" id="edit-comment-text-{{ comment.comment_id }}" name="comment_text">{{ comment.comment_text }}</textarea>
-                <button type="submit">Save</button>
-            </form>
+                {% if comment.user_id == current_user_id %}
+                    <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.comment_id) }}" style="display:inline;">
+                        <button class="delete-comment" type="submit">Delete</button>
+                    </form>
+                    <button onclick="showEditForm({{ comment.comment_id }})">Edit</button>
+                    <form id="edit-form-{{ comment.comment_id }}" style="display: none;" onsubmit="return editComment({{ comment.comment_id }})">
+                        <textarea class="edit-comment" id="edit-comment-text-{{ comment.comment_id }}" name="comment_text">{{ comment.comment_text }}</textarea>
+                        <button type="submit">Save</button>
+                    </form>
+                {% endif %}
+            {% endif %}
         {% endif %}
-    {% else %}
-        <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to reply.</p>
-    {% endif %}
 
-    {% if comment.child_comments %}
-        <ul class="child-comments">
-            {% for child_comment in comment.child_comments %}
-                {% with comment=child_comment %}
-                    {% include 'comment.html' %}
-                {% endwith %}
-            {% endfor %}
-        </ul>
-    {% endif %}
-</li>
+        {% if comment.child_comments %}
+            <ul class="child-comments">
+                {% for child_comment in comment.child_comments %}
+                    {% with comment=child_comment %}
+                        {% include 'comment.html' %}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endif %}
