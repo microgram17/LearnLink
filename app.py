@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from models import *
 from flask_migrate import Migrate, upgrade
 import os
@@ -99,10 +99,15 @@ def login():
 
 @app.route("/materials/<int:sub_cat_id>")
 def materials_page(sub_cat_id):
-    materials = Post.query.filter_by(sub_cat_id=sub_cat_id).all()
+    materials = (db.session.query(Post, db.func.sum(PostRating.rating).label('thumbs_up'))
+                 .outerjoin(PostRating, Post.post_id == PostRating.post_id)
+                 .filter(PostRating.rating == True, Post.sub_cat_id == sub_cat_id)
+                 .group_by(Post.post_id)
+                 .order_by(db.text('thumbs_up DESC'))
+                 .all())
+    
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
-
 
 @app.route("/materials/<int:sub_cat_id>/delete", methods=['POST'])
 @login_required
@@ -176,6 +181,14 @@ def build_comment_tree(comments):
 
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
+      """
+    View function to handle the material page, including displaying and adding comments.
+    Args:
+    - post_id: The ID of the material post.
+
+    Returns:
+    - Rendered HTML template for the material page.
+    """
     material = Post.query.get_or_404(post_id)
     comment_form = CommentForm()
 
@@ -357,6 +370,38 @@ def edit_comment(comment_id):
 
         return render_template('edit_comment.html', comment=comment, form=form)
 
+
+@app.route("/rate_post/<int:post_id>/<int:rating>", methods=['POST'])
+def rate_post(post_id, rating):
+    """
+    Route to handle rating a post.
+    Args:
+    - post_id: The ID of the post to rate.
+    - rating: The rating value (1 for thumbs up, 0 for thumbs down).
+
+    Returns:
+    - Redirects to the material page.
+    """
+    if not current_user.is_authenticated:
+        flash('You need to be logged in to rate posts.', 'danger')
+        return redirect(url_for('login', next=request.url))
+
+    existing_rating = PostRating.query.filter_by(post_id=post_id, user_id=current_user.user_id).first()
+
+    if existing_rating:
+        existing_rating.rating = bool(rating)
+    else:
+        new_rating = PostRating(
+            post_id=post_id,
+            user_id=current_user.user_id,
+            rating=bool(rating)
+        )
+        db.session.add(new_rating)
+
+    db.session.commit()
+    return redirect(url_for('material_page', post_id=post_id))
+      
+      
 @app.route("/search", methods=["POST", "GET"])
 def search():
 
@@ -497,6 +542,7 @@ def user_seed_data():
     except OperationalError as e:
         print(f"OperationalError: {e}")
         db.session.rollback()
+
 
 if __name__ == '__main__':
     with app.app_context():
