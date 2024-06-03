@@ -452,6 +452,20 @@ footer {
     background-color: #0056b3;
 }
 
+.delete-comment{
+    background-color: red !important;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-comment:hover {
+    background-color: darkred !important;
+}
+
+
 .comment .reply-form {
     margin-top: 10px;
     display: none;
@@ -475,6 +489,8 @@ footer {
 .comment .form-group button {
     margin-top: 5px;
 }
+
+/* comment end */
 
 .takeme {
     display: inline-block;
