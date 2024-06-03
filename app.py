@@ -191,7 +191,7 @@ def material_page(post_id):
                 comment_text=sanitize_input(comment_form.comment_text.data),
                 parent_comment_id=request.form.get('parent_comment_id', type=int),
                 created_at=datetime.now(),
-                updated_at=datetime.now()
+                updated_at=None,
             )
             db.session.add(new_comment)
             db.session.commit()
