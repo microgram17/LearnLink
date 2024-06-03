@@ -176,14 +176,6 @@ def build_comment_tree(comments):
 
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
-    """
-    View function to handle the material page, including displaying and adding comments.
-    Args:
-    - post_id: The ID of the material post.
-
-    Returns:
-    - Rendered HTML template for the material page.
-    """
     material = Post.query.get_or_404(post_id)
     comment_form = CommentForm()
 
@@ -200,7 +192,7 @@ def material_page(post_id):
                 parent_comment_id=request.form.get('parent_comment_id', type=int),
                 created_at=datetime.now(),
                 updated_at=datetime.now()
-            ) 
+            )
             db.session.add(new_comment)
             db.session.commit()
             flash('Comment posted successfully!', 'success')
@@ -209,6 +201,21 @@ def material_page(post_id):
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
     root_comments = build_comment_tree(comments)
     current_user_id = current_user.user_id if current_user.is_authenticated else None
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and 'comment_id' in request.form:
+        comment_id = request.form.get('comment_id', type=int)
+        comment_text = sanitize_input(request.form.get('comment_text'))
+        comment = Comments.query.get_or_404(comment_id)
+
+        if comment.user_id != current_user.user_id:
+            abort(403)
+
+        comment.comment_text = comment_text
+        comment.updated_at = datetime.now()
+        db.session.commit()
+        
+        return render_template('comment.html', comment=comment, comment_form=comment_form, current_user_id=current_user_id)
+
     return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user_id)
 
 
@@ -320,6 +327,35 @@ def edit_post(post_id):
             return redirect(url_for('material_page', post_id=post.post_id))
 
         return render_template('edit_post.html', post=post, form=form)
+
+
+@app.route('/edit_post/<comment_id>', methods=['GET', 'POST'])
+@auth_required()
+def edit_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+
+    # Kolla vilken användare
+    if comment.user_id != current_user.user_id:
+        abort(403)  # Om användare inte äger detta, kicka han
+
+    if request.method == 'GET':
+        form = CommentForm(obj=comment)
+        return render_template('edit_comment.html', comment=comment, form=form)
+
+    if request.method == 'POST':
+        form = CommentForm(request.form)
+
+        if form.validate_on_submit():
+            # Updatera
+            comment.comment_text = sanitize_input(form.comment_text.data)
+            comment.updated_at = datetime.now()
+
+            db.session.commit()
+
+            flash('Comment updated successfully!', 'success')
+            return redirect(url_for('material_page', post_id=comment.comment_id))
+
+        return render_template('edit_comment.html', comment=comment, form=form)
 
 @app.route("/search", methods=["POST", "GET"])
 def search():
