@@ -7,7 +7,7 @@
     <h2>All posts in {{ sub_category.sub_category_name }}</h2>
     <a class="post-button" href="{{ url_for('create_post', sub_cat_id=sub_category.sub_category_id) }}">Create Post</a>
     <section class="category-container">
-        {% for material, thumbs_up in materials %}
+        {% for material in materials %}
         <a class="material-box" href="{{ url_for('material_page', post_id=material.post_id) }}">
             <div class="material-sub-box">
                 <!-- Delete button visible only for admin and the post creator -->
@@ -23,7 +23,7 @@
                     <p><em>Posted at: {{ material.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</em></p>
                 </div>
                 <div class="ratings">
-                    <p>Thumbs Up: {{ thumbs_up or 0 }}</p>
+                    <p>Thumbs Up: {{ material.post_ratings|selectattr('rating', 'equalto', True)|list|length }}</p>
                     <p>Thumbs Down: {{ material.post_ratings|selectattr('rating', 'equalto', False)|list|length }}</p>
                 </div>
             </div>
