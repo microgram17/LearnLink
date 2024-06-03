@@ -14,7 +14,6 @@
                 Thumbs Up: {{ material.post_ratings|selectattr('rating', 'equalto', True)|list|length }} <br>
                 Thumbs Down: {{ material.post_ratings|selectattr('rating', 'equalto', False)|list|length }}
             </p>
-            <!-- Add rating buttons -->
             {% if current_user.is_authenticated %}
                 <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=1) }}">
                     <button type="submit" class="btn btn-success">👍</button>
@@ -26,7 +25,6 @@
 
             <span class="post-edited"> (Created {{ material.created_at.strftime('%Y-%m-%d %H:%M:%S') }})</span><br>
             {% if material.created_at != material.updated_at %}
-                <p></p>
                 <i><span class="post-edited"> (Edited {{ material.updated_at.strftime('%Y-%m-%d %H:%M:%S') }})</span></i>
             {% endif %}
                   
@@ -60,7 +58,7 @@
         {% endif %}
 
         <div class="comments">
-            {% for comment in comments %}
+            {% for comment in root_comments %}
                 {% with comment=comment %}
                     {% include 'comment.html' %}
                 {% endwith %}
