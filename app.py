@@ -181,7 +181,7 @@ def build_comment_tree(comments):
 
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
-      """
+    """
     View function to handle the material page, including displaying and adding comments.
     Args:
     - post_id: The ID of the material post.
