@@ -10,15 +10,26 @@
             <h1 class="post-title">{{ material.post_title }}</h1>
             <p class="post-body">{{ material.post_body | make_links | safe }}</p>
             
-            
+            <p>
+                Thumbs Up: {{ material.post_ratings|selectattr('rating', 'equalto', True)|list|length }} <br>
+                Thumbs Down: {{ material.post_ratings|selectattr('rating', 'equalto', False)|list|length }}
+            </p>
+            <!-- Add rating buttons -->
+            {% if current_user.is_authenticated %}
+                <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=1) }}">
+                    <button type="submit" class="btn btn-success">👍</button>
+                </form>
+                <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=0) }}">
+                    <button type="submit" class="btn btn-danger">👎</button>
+                </form>
+            {% endif %}
+
             <span class="post-edited"> (Created {{ material.created_at.strftime('%Y-%m-%d %H:%M:%S') }})</span><br>
-            <!-- Att man ser det är ändrat -->
             {% if material.created_at != material.updated_at %}
                 <p></p>
                 <i><span class="post-edited"> (Edited {{ material.updated_at.strftime('%Y-%m-%d %H:%M:%S') }})</span></i>
             {% endif %}
                   
-            <!-- Edit post funktionen -->
             {% if current_user.is_authenticated and material.user_id == current_user_id %}
                 <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="edit-button">Edit Post</a>
             {% endif %}
