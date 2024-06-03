@@ -70,9 +70,40 @@
 </section>
 
 <script>
-    function showReplyForm(commentId) {
-        var replyForm = document.getElementById('reply-form-' + commentId);
+function showReplyForm(commentId) {
+    var replyForm = document.getElementById('reply-form-' + commentId);
+    if (replyForm.style.display === 'none' || replyForm.style.display === '') {
         replyForm.style.display = 'block';
+    } else {
+        replyForm.style.display = 'none';
+    }
+}
+
+function showEditForm(commentId) {
+        var editForm = document.getElementById('edit-form-' + commentId);
+        editForm.style.display = 'block';
+    }
+
+    function editComment(commentId) {
+        var commentText = document.getElementById('edit-comment-text-' + commentId).value;
+        var formData = new FormData();
+        formData.append('comment_id', commentId);
+        formData.append('comment_text', commentText);
+
+        fetch("{{ url_for('material_page', post_id=material.post_id) }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(response => response.text())
+          .then(data => {
+              var commentElement = document.getElementById('comment-' + commentId);
+              commentElement.outerHTML = data;
+          });
+
+          
+        return false;  // Prevent the default form submission
     }
 </script>
 {% endblock %}
