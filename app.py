@@ -152,11 +152,12 @@ def build_comment_tree(comments):
     comment_dict = {comment.comment_id: comment for comment in comments}
     for comment in comments:
         comment.child_comments = []
-        if comment.deleted:
-            comment.comment_text = "This comment has been deleted."
+
     root_comments = []
 
     for comment in comments:
+        if comment.deleted:
+            comment.comment_text = "This comment has been deleted."
         if comment.parent_comment_id is None:
             root_comments.append(comment)
         else:
@@ -164,16 +165,9 @@ def build_comment_tree(comments):
             if parent:
                 parent.child_comments.append(comment)
 
-    # Debugging: Print the comment tree structure
-    def print_comment_tree(comments, level=0):
-        for comment in comments:
-            print("  " * level + f"Comment ID: {comment.comment_id}, Parent ID: {comment.parent_comment_id}")
-            if comment.child_comments:
-                print_comment_tree(comment.child_comments, level + 1)
-
-    print_comment_tree(root_comments)
-
     return root_comments
+
+
 
 @app.route("/material/<int:post_id>", methods=['GET', 'POST'])
 def material_page(post_id):
