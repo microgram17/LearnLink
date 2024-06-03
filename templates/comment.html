@@ -1,5 +1,5 @@
-<li class="comment">
-    <p><strong>{{ comment.user.user_name }}:</strong> {{ comment.comment_text }}</p>
+<li class="comment" id="comment-{{ comment.comment_id }}">
+    <p><strong>{{ comment.user.user_name }}:</strong> <span class="comment-text">{{ comment.comment_text }}</span></p>
     <div class="comment-meta">
         {% if comment.created_at %}
             <p>Created at: {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
@@ -17,10 +17,17 @@
                 </div>
                 <input type="hidden" name="parent_comment_id" value="{{ comment.comment_id }}">
                 <div class="form-group">
-                    {{ comment_form.submit }}
+                    {{ comment_form.submit(class="btn btn-primary") }}
                 </div>
             </form>
         </div>
+        {% if comment.user_id == current_user_id %}
+            <button onclick="showEditForm({{ comment.comment_id }})">Edit</button>
+            <form id="edit-form-{{ comment.comment_id }}" style="display: none;" onsubmit="return editComment({{ comment.comment_id }})">
+                <textarea id="edit-comment-text-{{ comment.comment_id }}" name="comment_text">{{ comment.comment_text }}</textarea>
+                <button type="submit">Save</button>
+            </form>
+        {% endif %}
     {% else %}
         <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to reply.</p>
     {% endif %}
