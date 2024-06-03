@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 from models import *
 from flask_migrate import Migrate, upgrade
 import os
@@ -103,7 +103,6 @@ def materials_page(sub_cat_id):
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
-
 @app.route("/materials/<int:sub_cat_id>/delete", methods=['POST'])
 @login_required
 def delete_post(sub_cat_id):
@@ -199,8 +198,8 @@ def material_page(post_id):
                 comment_text=sanitize_input(comment_form.comment_text.data),
                 parent_comment_id=request.form.get('parent_comment_id', type=int),
                 created_at=datetime.now(),
-                updated_at=datetime.now()
-            ) 
+                updated_at=None,
+            )
             db.session.add(new_comment)
             db.session.commit()
             flash('Comment posted successfully!', 'success')
@@ -209,6 +208,21 @@ def material_page(post_id):
     comments = Comments.query.filter_by(post_id=post_id).options(joinedload(Comments.child_comments)).all()
     root_comments = build_comment_tree(comments)
     current_user_id = current_user.user_id if current_user.is_authenticated else None
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' and 'comment_id' in request.form:
+        comment_id = request.form.get('comment_id', type=int)
+        comment_text = sanitize_input(request.form.get('comment_text'))
+        comment = Comments.query.get_or_404(comment_id)
+
+        if comment.user_id != current_user.user_id:
+            abort(403)
+
+        comment.comment_text = comment_text
+        comment.updated_at = datetime.now()
+        db.session.commit()
+        
+        return render_template('comment.html', comment=comment, comment_form=comment_form, current_user_id=current_user_id)
+
     return render_template("material_page.html", material=material, comments=root_comments, comment_form=comment_form, current_user_id=current_user_id)
 
 
@@ -263,18 +277,17 @@ def create_post(sub_cat_id):
 
         return render_template('create_post.html', sub_cat_id=sub_cat_id, form=form)
 
-# Route for editing a post
 @app.route('/edit_post/<post_id>', methods=['GET', 'POST'])
 @auth_required()
 def edit_post(post_id):
-    post = Post.query.get_or_404(post_id)  
+    post = Post.query.get_or_404(post_id)
 
     # Kolla vilken användare
     if post.user_id != current_user.user_id:
         abort(403)  # Om användare inte äger detta, kicka han
 
     if request.method == 'GET':
-        form = PostForm(obj=post)  
+        form = PostForm(obj=post)
         return render_template('edit_post.html', post=post, form=form)
 
     if request.method == 'POST':
@@ -286,11 +299,26 @@ def edit_post(post_id):
             post.post_body = sanitize_input(form.post_body.data)
             post.updated_at = datetime.now()
 
+            # Extract current video URLs from the updated post body
             video_urls = re.findall(
-                r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))', form.post_body.data)
-            for match in video_urls:
-                youtube_id = match[1] if match[1] else match[2]
-                if youtube_id:
+                r'(https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)|https?://youtu\.be/([a-zA-Z0-9_-]+))',
+                form.post_body.data
+            )
+            current_video_ids = {match[1] if match[1] else match[2] for match in video_urls}
+
+            # Find existing video attachments
+            existing_attachments = FileAttachment.query.filter_by(post_id=post.post_id, file_type='video').all()
+            existing_video_ids = {attachment.file_url.split('/')[-1] for attachment in existing_attachments}
+
+            # Delete video attachments that are no longer in the post body
+            for attachment in existing_attachments:
+                youtube_id = attachment.file_url.split('/')[-1]
+                if youtube_id not in current_video_ids:
+                    db.session.delete(attachment)
+
+            # Add new video URLs that are not already in the database
+            for youtube_id in current_video_ids:
+                if youtube_id not in existing_video_ids:
                     youtube_embed_url = f"https://www.youtube.com/embed/{youtube_id}"
                     new_video = FileAttachment(
                         post_id=post.post_id,
@@ -303,10 +331,71 @@ def edit_post(post_id):
             db.session.commit()
 
             flash('Post updated successfully!', 'success')
-            return redirect(url_for('material_page', post_id=post.post_id))  
+            return redirect(url_for('material_page', post_id=post.post_id))
 
         return render_template('edit_post.html', post=post, form=form)
 
+
+@app.route('/edit_post/<comment_id>', methods=['GET', 'POST'])
+@auth_required()
+def edit_comment(comment_id):
+    comment = Comments.query.get_or_404(comment_id)
+
+    # Kolla vilken användare
+    if comment.user_id != current_user.user_id:
+        abort(403)  # Om användare inte äger detta, kicka han
+
+    if request.method == 'GET':
+        form = CommentForm(obj=comment)
+        return render_template('edit_comment.html', comment=comment, form=form)
+
+    if request.method == 'POST':
+        form = CommentForm(request.form)
+
+        if form.validate_on_submit():
+            # Updatera
+            comment.comment_text = sanitize_input(form.comment_text.data)
+            comment.updated_at = datetime.now()
+
+            db.session.commit()
+
+            flash('Comment updated successfully!', 'success')
+            return redirect(url_for('material_page', post_id=comment.comment_id))
+
+        return render_template('edit_comment.html', comment=comment, form=form)
+
+
+@app.route("/rate_post/<int:post_id>/<int:rating>", methods=['POST'])
+def rate_post(post_id, rating):
+    """
+    Route to handle rating a post.
+    Args:
+    - post_id: The ID of the post to rate.
+    - rating: The rating value (1 for thumbs up, 0 for thumbs down).
+
+    Returns:
+    - Redirects to the material page.
+    """
+    if not current_user.is_authenticated:
+        flash('You need to be logged in to rate posts.', 'danger')
+        return redirect(url_for('login', next=request.url))
+
+    existing_rating = PostRating.query.filter_by(post_id=post_id, user_id=current_user.user_id).first()
+
+    if existing_rating:
+        existing_rating.rating = bool(rating)
+    else:
+        new_rating = PostRating(
+            post_id=post_id,
+            user_id=current_user.user_id,
+            rating=bool(rating)
+        )
+        db.session.add(new_rating)
+
+    db.session.commit()
+    return redirect(url_for('material_page', post_id=post_id))
+      
+      
 @app.route("/search", methods=["POST", "GET"])
 def search():
 
@@ -447,6 +536,7 @@ def user_seed_data():
     except OperationalError as e:
         print(f"OperationalError: {e}")
         db.session.rollback()
+
 
 if __name__ == '__main__':
     with app.app_context():

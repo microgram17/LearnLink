@@ -112,40 +112,6 @@ nav p {
     transition: 0.2s linear;
 }
 
-/* Responsive styles */
-@media screen and (min-width: 600px) {
-    nav {
-        width: 11%;
-    }
-    .content {
-        margin-left: 15%;
-        padding: 20px;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .content {
-        margin-left: 5%;
-        margin-top: 200px; /* Adjust based on navbar height */
-        padding: 20px;
-    }
-
-    nav {
-        text-align: center;
-        float: none;
-        width: 100%;
-        height: auto;
-        display: block;
-        position: fixed;
-        z-index: 1; /* Stay on top */
-    }
-
-    nav li a {
-        text-align: center;
-        float: none;
-    }
-}
-
 .content {
     min-height: 84.5vh;
 }
@@ -329,9 +295,9 @@ footer {
     margin-bottom: 2em;
 }
 
-.content-21:hover {
+/* .content-21:hover {
     transform: scale(1.02);
-}
+} */
 
 /* Title */
 .post-title-21 h1 {
@@ -597,7 +563,9 @@ footer {
 }
 
 .post-username {
-    color: purple;
+    color: #007bff; /* Bootstrap primary blue color */
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .post-text {
@@ -609,25 +577,125 @@ footer {
 }
 
 .delete_me_materials {
-    display: inline;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: inline-block;
     padding: 0.15vh 0.5vw;
     border: 0;
-    background-color: #eb4a4a;
+    background-color: transparent;
     font-size: 1vw;
     cursor: pointer;
-    border-radius: 2vw;
-    float: right;
+    z-index: 10; /* Ensure it is on top of other elements */
 }
 
 .delete_post {
     font-family: "Sanchez", serif;
     font-weight: 400;
     font-style: italic;
-    background-color: #eb4a4a;
-    color: #f3ebeb;
-    padding: 1vh 1.5vw;
-    border: none;
-    border-radius: 2vw;
+    background-color: #eb4a4a; /* Primary color */
+    color: #ffffff; /* Text color */
+    padding: 0.5vh 1.5vw;
+    border: 2px solid #eb4a4a;
+    border-radius: 12px;
     cursor: pointer;
     font-size: large;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover state */
+.delete_post:hover {
+    background-color: #d43f3f; /* Darker primary color for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow effect on hover */
+}
+
+/* Active state */
+.delete_post:active {
+    background-color: #c0392b; /* Even darker primary color for active effect */
+    transform: scale(0.95); /* Slightly shrink the button on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Reduced shadow effect on click */
+}
+
+/* Focus state for accessibility */
+.delete_post:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(235, 74, 74, 0.5); /* Focus ring for accessibility */
+}
+
+/* Edit button styling */
+.edit-button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff; /* Text color */
+    background-color: #007bff; /* Primary blue color */
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover state */
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow effect on hover */
+}
+
+/* Active state */
+.edit-button:active {
+    background-color: #004085; /* Even darker blue for active effect */
+    transform: scale(0.95); /* Slightly shrink the button on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Reduced shadow effect on click */
+}
+
+/* Focus state for accessibility */
+.edit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Focus ring for accessibility */
+}
+
+.edit-comment {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Responsive styles */
+@media screen and (min-width: 800px) {
+    nav {
+        width: 11%;
+    }
+    .content {
+        margin-left: 15%;
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .content {
+        margin-left: 5%;
+        margin-top: 200px; /* Adjust based on navbar height */
+        padding: 20px;
+    }
+
+    nav {
+        text-align: center;
+        float: none;
+        width: 100%;
+        height: auto;
+        display: block;
+        position: fixed;
+        z-index: 1; /* Stay on top */
+    }
+
+    nav li a {
+        text-align: center;
+        float: none;
+    }
 }
