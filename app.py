@@ -99,13 +99,7 @@ def login():
 
 @app.route("/materials/<int:sub_cat_id>")
 def materials_page(sub_cat_id):
-    materials = (db.session.query(Post, db.func.sum(PostRating.rating).label('thumbs_up'))
-                 .outerjoin(PostRating, Post.post_id == PostRating.post_id)
-                 .filter(PostRating.rating == True, Post.sub_cat_id == sub_cat_id)
-                 .group_by(Post.post_id)
-                 .order_by(db.text('thumbs_up DESC'))
-                 .all())
-    
+    materials = Post.query.filter_by(sub_cat_id=sub_cat_id).all()
     sub_category = SubCategory.query.get(sub_cat_id)
     return render_template("materials_page.html", materials=materials, sub_category=sub_category)
 
