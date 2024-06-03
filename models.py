@@ -87,6 +87,7 @@ class Comments(db.Model):
     comment_text = Column(String(255))
     created_at = Column(DateTime())
     updated_at = Column(DateTime())
+    deleted = Column(Boolean, default=False)
 
     user = relationship('User', back_populates='created_comments')
     related_post = relationship('Post', back_populates='related_comments')
