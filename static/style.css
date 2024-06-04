@@ -631,7 +631,7 @@ footer {
 
 /* Edit button styling */
 .edit-button {
-    display: inline-block;
+    display: block;
     padding: 5px 10px;
     font-size: 1rem;
     font-weight: bold;
@@ -644,6 +644,8 @@ footer {
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    float: right;
+    margin-top: -50px;
 }
 
 /* Hover state */
@@ -704,4 +706,43 @@ footer {
         text-align: center;
         float: none;
     }
+}
+
+.post-temp {
+    display: flex;
+    align-items: center;
+}
+
+.vertical-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-right: 0.2rem;
+}
+
+.btn-success, .btn-danger {
+    font-size: 1.2rem;
+    margin: 0.1rem 0;
+}
+
+.ratings-display-auth {
+    margin: .2rem;
+    font-size: 1rem;
+}
+
+.upvote-auth {
+    margin-bottom: 10px;
+}
+
+.alert-danger{
+    margin-left: 15%;
+    padding: 20px;
+}
+
+.search {
+    margin-bottom: 0.2em;
+    padding: 0.5em;
+}
+
+.search-button {
+    padding: 0.5em;
 }

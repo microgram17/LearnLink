@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify, session
 from models import *
 from flask_migrate import Migrate, upgrade
 import os
@@ -96,6 +96,12 @@ def login():
     if request.method == ["POST"]:
         if role == "Admin":
             return redirect(url_for("login"))
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Clear session
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('login.html'))
 
 @app.route("/materials/<int:sub_cat_id>")
 def materials_page(sub_cat_id):
@@ -378,7 +384,7 @@ def rate_post(post_id, rating):
     """
     if not current_user.is_authenticated:
         flash('You need to be logged in to rate posts.', 'danger')
-        return redirect(url_for('login', next=request.url))
+        return redirect(url_for('login'))
 
     existing_rating = PostRating.query.filter_by(post_id=post_id, user_id=current_user.user_id).first()
 
