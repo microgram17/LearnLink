@@ -637,15 +637,13 @@ footer {
     font-weight: bold;
     color: #ffffff; /* Text color */
     background-color: #007bff; /* Primary blue color */
-    margin-bottom: 1rem;
     border: none;
     border-radius: 5px;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    float: right;
-    margin-top: -50px;
+    margin-bottom: 5px;
 }
 
 /* Hover state */
@@ -745,4 +743,56 @@ footer {
 
 .search-button {
     padding: 0.5em;
+}
+
+.delete_me_materials-in-post {
+    top: 10px;
+    right: 10px;
+    display: inline-block;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 10; /* Ensure it is on top of other elements */
+}
+
+.delete-button-in-post {
+    display: block;
+    padding: 5px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff; /* Text color */
+    background-color: #ff0000; /* Primary blue color */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover state */
+.delete-button-in-post:hover {
+    background-color: #c20e0e; /* Darker blue for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow effect on hover */
+}
+
+/* Active state */
+.delete-button-in-post:active {
+    background-color: #a10000; /* Even darker blue for active effect */
+    transform: scale(0.95); /* Slightly shrink the button on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Reduced shadow effect on click */
+}
+
+/* Focus state for accessibility */
+.delete-button-in-post:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Focus ring for accessibility */
+}
+
+.inpost-buttons{
+    display: flex;
+    flex-direction: column;
+    float: right;
+    margin-top: -50px;
 }
