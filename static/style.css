@@ -690,7 +690,7 @@ footer {
 }
 
 /* Responsive styles */
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 400px) {
     nav {
         width: 11%;
     }
@@ -700,7 +700,7 @@ footer {
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 400px) {
     .content {
         margin-left: 5%;
         margin-top: 350px; /* Adjust based on navbar height */
