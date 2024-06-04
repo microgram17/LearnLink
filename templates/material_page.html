@@ -1,69 +1,67 @@
 {% extends "base.html" %}
 
-{% block title %}Material{% endblock %}
+{% block title %}{{ material.post_title }}{% endblock %}
 
 {% block content %}
 <section class="content">
     <section class="content-21">
         <div class="post-content-21">
-            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span></p>
-            <h1 class="post-title">{{ material.post_title }}</h1>
-            <p class="post-body">{{ material.post_body | make_links | safe }}</p>
-            
-            <p>
-                Thumbs Up: {{ material.post_ratings|selectattr('rating', 'equalto', True)|list|length }} <br>
-                Thumbs Down: {{ material.post_ratings|selectattr('rating', 'equalto', False)|list|length }}
-            </p>
-            <!-- Add rating buttons -->
-            {% if current_user.is_authenticated %}
-                <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=1) }}">
-                    <button type="submit" class="btn btn-success">👍</button>
-                </form>
-                <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=0) }}">
-                    <button type="submit" class="btn btn-danger">👎</button>
-                </form>
+            <p class="post-author">Posted by: <span class="post-username"> {{ material.user.user_name }} </span></p></div>
+            <div class="post-temp">
+                <div class="ratings-display-auth">
+                    <p class="upvote-auth">{{ material.post_ratings|selectattr('rating', 'equalto', True)|list|length }}</p>
+                    <p>{{ material.post_ratings|selectattr('rating', 'equalto', False)|list|length }}</p>
+                </div>
+                <div class="vertical-buttons">
+                    <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=1) }}">
+                        <button type="submit" class="btn btn-success">👍</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('rate_post', post_id=material.post_id, rating=0) }}">
+                        <button type="submit" class="btn btn-danger">👎</button>
+                    </form>
+                </div>
+                <h1 class="post-title">{{ material.post_title }}</h1>
+            </div>
+            {% if current_user.is_authenticated and material.user_id == current_user_id %}
+            <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="edit-button">Edit Post</a>
             {% endif %}
-
+            <p class="post-body">{{ material.post_body | replace('\n', '<br>') | make_links | safe }}</p>
+            {% for attachment in material.files_attached %}
+            {% if attachment.file_type == 'video' %}
+            <div>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ attachment.file_url.split('/')[-1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            {% endif %}
             <span class="post-edited"> (Created {{ material.created_at.strftime('%Y-%m-%d %H:%M:%S') }})</span><br>
             {% if material.created_at != material.updated_at %}
-                <p></p>
-                <i><span class="post-edited"> (Edited {{ material.updated_at.strftime('%Y-%m-%d %H:%M:%S') }})</span></i>
+            <p></p>
+            <i><span class="post-edited"> (Edited {{ material.updated_at.strftime('%Y-%m-%d %H:%M:%S') }})</span></i><br>
             {% endif %}
-                  
-            {% if current_user.is_authenticated and material.user_id == current_user_id %}
-                <a href="{{ url_for('edit_post', post_id=material.post_id) }}" class="edit-button">Edit Post</a>
-            {% endif %}
-            {% for attachment in material.files_attached %}
-                {% if attachment.file_type == 'video' %}
-                    <div>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ attachment.file_url.split('/')[-1] }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                {% endif %}
             {% endfor %}
         </div>
     </section>
-
+    
     <section class="comments-section">
         <h2>Comments</h2>
         {% if current_user.is_authenticated %}
-            <form method="POST" action="{{ url_for('material_page', post_id=material.post_id) }}">
-                {{ comment_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ comment_form.comment_text(placeholder="Your comment", class="form-control") }}
-                </div>
-                <div class="form-group">
-                    {{ comment_form.submit(class="btn btn-primary") }}
-                </div>
-            </form>
+        <form method="POST" action="{{ url_for('material_page', post_id=material.post_id) }}">
+            {{ comment_form.hidden_tag() }}
+            <div class="form-group">
+                {{ comment_form.comment_text(placeholder="Your comment", class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ comment_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
         {% else %}
-            <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to comment.</p>
+        <p>You need to be <a href="{{ url_for('login', next=request.url) }}">logged in</a> to comment.</p>
         {% endif %}
-
+        
         <div class="comments">
             {% for comment in comments %}
-                {% with comment=comment %}
-                    {% include 'comment.html' %}
-                {% endwith %}
+            {% with comment=comment %}
+            {% include 'comment.html' %}
+            {% endwith %}
             {% endfor %}
         </div>
     </section>
