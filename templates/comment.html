@@ -28,10 +28,12 @@
                         </div>
                     </form>
                 </div>
-                {% if comment.user_id == current_user_id %}
+                {% if comment.user_id == current_user.user_id or current_user.has_role('Admin') %}
                     <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.comment_id) }}" style="display:inline;">
                         <button class="delete-comment" type="submit">Delete</button>
                     </form>
+                {% endif %}
+                {% if comment.user_id == current_user.user_id %}
                     <button onclick="showEditForm({{ comment.comment_id }})">Edit</button>
                     <form id="edit-form-{{ comment.comment_id }}" style="display: none;" onsubmit="return editComment({{ comment.comment_id }})">
                         <textarea class="edit-comment" id="edit-comment-text-{{ comment.comment_id }}" name="comment_text">{{ comment.comment_text }}</textarea>

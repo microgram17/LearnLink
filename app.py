@@ -470,10 +470,11 @@ def make_links(text):
 
 
 @app.route("/delete_comment/<int:comment_id>", methods=['POST'])
+@roles_accepted("User", "Admin")
 @login_required
 def delete_comment(comment_id):
     comment = Comments.query.get_or_404(comment_id)
-    if comment.user_id != current_user.user_id:
+    if comment.user_id != current_user.user_id and not current_user.has_role('Admin'):
         abort(403)
 
     comment.deleted = True
